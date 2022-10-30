@@ -1,0 +1,47 @@
+<header class="p-3 text-bg-dark" th:fragment="header">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img th:src="@{/img/SRlogo.svg}" alt="StudentRating" class="bi me-2" width="40" height="40" role="img"
+                     aria-label="StudentRating">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/rating/getAll" class="nav-link px-2"
+                       th:classappend="${#httpServletRequest.getRequestURI() == '/rating/getAll' ? 'text-secondary':'text-white'}">Рейтинг</a>
+                </li>
+                <li><a href="/tasks/getAll" class="nav-link px-2"
+                       th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getAll' ? 'text-secondary':'text-white'}">Поручения</a>
+                </li>
+                <li><a href="/tasks/getById" class="nav-link px-2"
+                       th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getById' ? 'text-secondary':'text-white'}">Мои
+                    поручения</a>
+                </li>
+                <li><a href="/pages/about" class="nav-link px-2"
+                       th:classappend="${#httpServletRequest.getRequestURI() == '/pages/about' ? 'text-secondary':'text-white'}">Справка</a>
+                </li>
+            </ul>
+
+<!--            <div class="text-end">-->
+<!--                <button type="button" class="btn btn-outline-light me-2">Авторизация</button>-->
+<!--                <button type="button" class="btn btn-warning">Регистрация</button>-->
+<!--            </div>-->
+
+            <div class="dropdown text-end">
+                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="40" height="40"
+                         class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small" style="">
+                    <li><a class="dropdown-item" href="#">Профиль</a></li>
+                    <li><a class="dropdown-item" href="#">Настройки</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Выход</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

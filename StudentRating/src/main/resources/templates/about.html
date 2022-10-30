@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <div class="bd-example">
+            <p class="lead">
+                Студенческий рейтинг - сервис для оценки учебной и внеучебной деятельности студентов преподавателями.
+            </p>
+            <p class="lead">
+                Студенты могут посмотреть свой рейтинг и рейтинг других студентов. Могут ознакомиться с личными заслугами и оплошностями своими и остальных студентов.
+            </p>
+            <p class="lead">
+                Преподаватели имеют возможность вносить достижения и проступки студентов, оценивая это баллами, которые прибавляются или вычитаются из имеющихся у данного студента баллов.
+            </p>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>

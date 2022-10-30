@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <div class="row g-5">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Группа</th>
+                    <th scope="col">Количество очков</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Кирилл Иванов</td>
+                    <td>ИУК5-11Б</td>
+                    <td>89</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Андрей Смирнов</td>
+                    <td>ИУК5-31Б</td>
+                    <td>85</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Петр Симонов</td>
+                    <td>ИУК5-32Б</td>
+                    <td>84</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>
