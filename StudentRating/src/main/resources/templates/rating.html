@@ -8,37 +8,66 @@
         <h1 th:text="${title}"></h1>
         <hr>
 
-        <div class="row g-5">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Имя</th>
-                    <th scope="col">Группа</th>
-                    <th scope="col">Количество очков</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Кирилл Иванов</td>
-                    <td>ИУК5-11Б</td>
-                    <td>89</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Андрей Смирнов</td>
-                    <td>ИУК5-31Б</td>
-                    <td>85</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Петр Симонов</td>
-                    <td>ИУК5-32Б</td>
-                    <td>84</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="container row g-5">
+
+            <div class="col">
+
+                <div class="card bg-light">
+                    <div class="row card-body justify-content-evenly p-2">
+                        <div class="col-sm-1">
+                            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                                <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="40"
+                                     height="40"
+                                     class="rounded-circle">
+                            </a>
+                        </div>
+
+                        <div class="col-sm mt-2">
+                            <a class="card-text">Кирилл Иванов</a>
+                        </div>
+                        <div class="col-sm mt-2">
+                            <p class="card-text">ИУК5-11Б</p>
+                        </div>
+                        <div class="col-sm-auto mt-2 me-3">
+                            <p class="card-text">89</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <!--            <table class="table table-striped">-->
+            <!--                <thead>-->
+            <!--                <tr>-->
+            <!--                    <th scope="col">#</th>-->
+            <!--                    <th scope="col">Имя</th>-->
+            <!--                    <th scope="col">Группа</th>-->
+            <!--                    <th scope="col">Количество очков</th>-->
+            <!--                </tr>-->
+            <!--                </thead>-->
+            <!--                <tbody>-->
+            <!--                <tr>-->
+            <!--                    <th scope="row">1</th>-->
+            <!--                    <td>Кирилл Иванов</td>-->
+            <!--                    <td>ИУК5-11Б</td>-->
+            <!--                    <td>89</td>-->
+            <!--                </tr>-->
+            <!--                <tr>-->
+            <!--                    <th scope="row">2</th>-->
+            <!--                    <td>Андрей Смирнов</td>-->
+            <!--                    <td>ИУК5-31Б</td>-->
+            <!--                    <td>85</td>-->
+            <!--                </tr>-->
+            <!--                <tr>-->
+            <!--                    <th scope="row">3</th>-->
+            <!--                    <td>Петр Симонов</td>-->
+            <!--                    <td>ИУК5-32Б</td>-->
+            <!--                    <td>84</td>-->
+            <!--                </tr>-->
+            <!--                </tbody>-->
+            <!--            </table>-->
         </div>
     </div>
 </main>
