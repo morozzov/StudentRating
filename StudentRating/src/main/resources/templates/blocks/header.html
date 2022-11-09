@@ -13,8 +13,8 @@
                 <li><a href="/tasks/getAll" class="nav-link px-2"
                        th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getAll' ? 'text-secondary':'text-white'}">Поручения</a>
                 </li>
-                <li><a href="/tasks/getById" class="nav-link px-2"
-                       th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getById' ? 'text-secondary':'text-white'}">Мои
+                <li><a href="/tasks/getByUser" class="nav-link px-2"
+                       th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getByUser' ? 'text-secondary':'text-white'}">Мои
                     поручения</a>
                 </li>
                 <li><a href="/pages/about" class="nav-link px-2"

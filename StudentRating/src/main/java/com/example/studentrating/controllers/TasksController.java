@@ -6,13 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/rating")
-public class RatingController {
+@RequestMapping("/tasks")
+public class TasksController {
 
     @GetMapping("/getAll")
     public String getAll(Model model) {
-        model.addAttribute("title", "Рейтинг");
-        return "rating";
+        model.addAttribute("title", "Поручения");
+        return "tasks";
     }
 
+    @GetMapping("/getByUser")
+    public String getByUser(Model model) {
+        model.addAttribute("title", "Мои поручения");
+        return "myTasks";
+    }
 }

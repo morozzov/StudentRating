@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <div class="container">
+            <div class="card bg-light mb-3">
+                <div class="card-header text-center">
+                    Помочь
+                </div>
+                <div class="card-body">
+                    <div class="col">
+                        <div class="row justify-content-center align-items-center align-items-center">
+                            <p class="col text-start">Заказчик: Петров И.В.</p>
+                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>
+                            <p class="col text-end">Стоимость: 1</p>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-outline-danger" type="button">Отказаться</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>
