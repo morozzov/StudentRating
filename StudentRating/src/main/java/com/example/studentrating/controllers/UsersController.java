@@ -10,8 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UsersController {
 
     @GetMapping("/getById")
-    public String getAll(Model model) {
+    public String getById(Model model) {
         model.addAttribute("title", "Профиль");
         return "profile";
+    }
+
+    @GetMapping("/getSettingsById")
+    public String getSettingsById(Model model) {
+        model.addAttribute("title", "Настройки");
+        return "settings";
     }
 }
