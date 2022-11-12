@@ -20,4 +20,10 @@ public class UsersController {
         model.addAttribute("title", "Настройки");
         return "settings";
     }
+
+    @GetMapping("/signIn")
+    public String signIn(Model model) {
+        model.addAttribute("title", "Авторизация");
+        return "signIn";
+    }
 }
