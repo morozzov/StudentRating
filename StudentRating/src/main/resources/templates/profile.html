@@ -11,13 +11,13 @@
         <div class="d-flex justify-content-center mb-3">
             <div class="row">
                 <div class="col-auto">
-                    <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="150" height="150"
+                    <img th:src="'/img/avatars/' + ${student.imageUrl}" alt="mdo" width="150" height="150"
                          class="rounded-circle">
                 </div>
                 <div class="col p-4 ">
-                    <h5>Кирилл Иванов</h5>
-                    <h5>ИУК5-51Б</h5>
-                    <h5>90 очков</h5>
+                    <h5 th:text="${student.name} + ' ' + ${student.surname}"></h5>
+                    <h5 th:text="${student.groupName}"></h5>
+                    <h5 th:text="${student.points} + ' очков'"></h5>
                 </div>
 
                 <div class="col align-content-center col-auto">
