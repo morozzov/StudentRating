@@ -9,56 +9,57 @@
         <hr>
 
         <div class="d-flex justify-content-center mb-3">
-            <div class="row">
-                <div class="col">
-                    <div class="row justify-content-center">
-                        <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="140" height="140"
-                             class="rounded-circle mb-3 w-auto" id="photo">
-                    </div>
-                    <div class="mb-3 w-auto">
-                        <input class="form-control" type="file" id="formFile" accept=".jpg, .jpeg, .png, .svg" onchange="loadFile(event)">
-                    </div>
-                    <script>
-                        var loadFile = function(event) {
-                            var output = document.getElementById('photo');
-                            output.src = URL.createObjectURL(event.target.files[0]);
-                            output.onload = function() {
-                                URL.revokeObjectURL(output.src) // free memory
-                            }
-                        };
-                    </script>
-                </div>
+            <form method="" action="" class="col">
+                <div class="row">
 
-                <form class="col align-items-center" method="" action="" >
-                    <div class="mb-2 input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping">@</span>
+                    <div class="col">
+                        <div class="row justify-content-center">
+                            <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="140"
+                                 height="140"
+                                 class="rounded-circle mb-3 w-auto" id="photo">
+                        </div>
+                        <div class="mb-3 w-auto">
+                            <input class="form-control" type="file" id="formFile" accept=".jpg, .jpeg, .png, .svg"
+                                   onchange="loadFile(event)">
+                        </div>
+                        <script>
+                            var loadFile = function (event) {
+                                var output = document.getElementById('photo');
+                                output.src = URL.createObjectURL(event.target.files[0]);
+                                output.onload = function () {
+                                    URL.revokeObjectURL(output.src) // free memory
+                                }
+                            };
+                        </script>
+                    </div>
+
+                    <div class="col align-items-end">
+                        <div class="mb-2 mt-1 input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">@</span>
+                            <div class="form-floating ">
+                                <input name="login" type="email" class="form-control" placeholder="login"
+                                       id="inputLogin">
+                                <label name="login" for="inputLogin">Логин</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input name="password" type="password" class="form-control" placeholder="Password"
+                                   id="inputPassword">
+                            <label name="password" for="inputPassword">Пароль</label>
+                        </div>
                         <div class="form-floating ">
-                            <input name="login" type="email" class="form-control" placeholder="login" id="inputLogin">
-                            <label name="login" for="inputLogin">Логин</label>
+                            <input name="password" type="password" class="form-control" placeholder="Password"
+                                   id="inputPasswordAgain">
+                            <label name="password" for="inputPasswordAgain">Пароль снова</label>
                         </div>
                     </div>
-                    <div class="form-floating mb-2">
-                        <input name="password" type="password" class="form-control" placeholder="Password" id="inputPassword">
-                        <label name="password" for="inputPassword">Пароль</label>
-                    </div>
-                    <div class="form-floating mb-2">
-                        <input name="password" type="password" class="form-control" placeholder="Password" id="inputPasswordAgain">
-                        <label name="password" for="inputPasswordAgain">Пароль снова</label>
-                    </div>
+                </div>
 
-
-
-                </form>
-
-            </div>
+                <div class="row ps-lg-2 pe-lg-2">
+                    <button type="submit" class="btn btn-outline-success">Применить</button>
+                </div>
+            </form>
         </div>
-
-
-
-
-
-        </div>
-
     </div>
 </main>
 <footer th:replace="blocks/footer :: footer"></footer>
