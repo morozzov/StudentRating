@@ -24,6 +24,8 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    private String login;
+
     private String name;
 
     private String surname;
