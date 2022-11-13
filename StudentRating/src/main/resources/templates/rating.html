@@ -9,74 +9,31 @@
         <hr>
 
         <div class="container">
-            <div class="card bg-light mb-3">
+
+<!--            <th:block th:each="student : ${students}">-->
+            <div th:each="student : ${students}" class="card bg-light mb-3">
                 <div class="d-flex flex-wrap align-items-center justify-content-center">
                     <div class="col-1 m-1 justify-content-center">
-                        <a href="/users/getById/1" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                            <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="40"
+                        <a th:href="'/students/getById/' + ${student.id}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                            <img th:src="${student.imageUrl}" alt="mdo" width="40"
                                  height="40"
                                  class="rounded-circle">
                         </a>
                     </div>
                     <div class="col justify-content-center">
                         <a href="/users/getById/1" class="link-dark text-decoration-none">
-                            <p class="card-text text-start">Кирилл Иванов</p>
+                            <p th:text="${student.name} + ' ' +  ${student.surname}" class="card-text text-start"></p>
                         </a>
                     </div>
                     <div class="col justify-content-center">
-                        <p class="card-text text-center">ИУК5-11Б</p>
+                        <p th:text="${student.groupName}" class="card-text text-center"></p>
                     </div>
                     <div class="col p-2 justify-content-center">
-                        <p class="card-text text-end">89</p>
+                        <p th:text="${student.points}" class="card-text text-end"></p>
                     </div>
                 </div>
             </div>
-
-            <div class="card bg-light mb-3">
-                <div class="d-flex flex-wrap align-items-center justify-content-center">
-                    <div class="col-1 m-1 justify-content-center">
-                        <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                            <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="40"
-                                 height="40"
-                                 class="rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col justify-content-center">
-                        <a href="" class="link-dark text-decoration-none">
-                            <p class="card-text text-start">Кирилл Иванов</p>
-                        </a>
-                    </div>
-                    <div class="col justify-content-center">
-                        <p class="card-text text-center">ИУК5-11Б</p>
-                    </div>
-                    <div class="col p-2 justify-content-center">
-                        <p class="card-text text-end">89</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bg-light mb-3">
-                <div class="d-flex flex-wrap align-items-center justify-content-center">
-                    <div class="col-1 m-1 justify-content-center">
-                        <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                            <img src="https://avatars.githubusercontent.com/u/76492047?v=4" alt="mdo" width="40"
-                                 height="40"
-                                 class="rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col justify-content-center">
-                        <a href="" class="link-dark text-decoration-none">
-                            <p class="card-text text-start">Кирилл Иванов</p>
-                        </a>
-                    </div>
-                    <div class="col justify-content-center">
-                        <p class="card-text text-center">ИУК5-11Б</p>
-                    </div>
-                    <div class="col p-2 justify-content-center">
-                        <p class="card-text text-end">89</p>
-                    </div>
-                </div>
-            </div>
+<!--            </th:block>-->
         </div>
     </div>
 </main>
