@@ -8,17 +8,15 @@
         <h1 th:text="${title}"></h1>
         <hr>
 
-        <div class="container">
+        <div th:each="task : ${tasks}" class="container">
             <div class="card bg-light mb-3">
-                <div class="card-header text-center">
-                    Помочь
-                </div>
+                <div th:text="${task.getTitle()}" class="card-header text-center"></div>
                 <div class="card-body">
                     <div class="col">
                         <div class="row justify-content-center align-items-center align-items-center">
-                                <p class="col text-start">Заказчик: Петров И.В.</p>
-                                <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>
-                                <p class="col text-end">Стоимость: 1</p>
+                                <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()} + ' ' + ${task.getAuthor().getPatronymic()}" class="col text-start"></p>
+                                <p th:text="'Крайний срок: ' + ${task.getDeadLine()}" class="col text-center"></p>
+                                <p th:text="'Стоимость: ' + ${task.getCost()}" class="col text-end"></p>
                         </div>
                         <div class="d-grid">
                             <button class="btn btn-outline-success" type="button">Откликнуться</button>
@@ -27,41 +25,41 @@
                 </div>
             </div>
 
-            <div class="card bg-light mb-3">
-                <div class="card-header text-center">
-                    Помочь
-                </div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row justify-content-center align-items-center align-items-center">
-                            <p class="col text-start">Заказчик: Петров И.В.</p>
-                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>
-                            <p class="col text-end">Стоимость: 1</p>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-outline-danger disabled" type="button">Занято</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="card bg-light mb-3">-->
+<!--                <div class="card-header text-center">-->
+<!--                    Помочь-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <div class="col">-->
+<!--                        <div class="row justify-content-center align-items-center align-items-center">-->
+<!--                            <p class="col text-start">Заказчик: Петров И.В.</p>-->
+<!--                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>-->
+<!--                            <p class="col text-end">Стоимость: 1</p>-->
+<!--                        </div>-->
+<!--                        <div class="d-grid">-->
+<!--                            <button class="btn btn-outline-danger disabled" type="button">Занято</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="card bg-light mb-3">
-                <div class="card-header text-center">
-                    Помочь
-                </div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row justify-content-center align-items-center align-items-center">
-                            <p class="col text-start">Заказчик: Петров И.В.</p>
-                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>
-                            <p class="col text-end">Стоимость: 1</p>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-outline-secondary disabled" type="button">Занято вами</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="card bg-light mb-3">-->
+<!--                <div class="card-header text-center">-->
+<!--                    Помочь-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <div class="col">-->
+<!--                        <div class="row justify-content-center align-items-center align-items-center">-->
+<!--                            <p class="col text-start">Заказчик: Петров И.В.</p>-->
+<!--                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>-->
+<!--                            <p class="col text-end">Стоимость: 1</p>-->
+<!--                        </div>-->
+<!--                        <div class="d-grid">-->
+<!--                            <button class="btn btn-outline-secondary disabled" type="button">Занято вами</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
 
     </div>
