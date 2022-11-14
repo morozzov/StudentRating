@@ -4,7 +4,7 @@ from telebot import types
 import json
 import requests
 
-access_key = "5554978929:AAFy6DZZPV61ZpUdX-p5dQ7sQ77V10913RE"
+access_key = "access_key"
 bot = telebot.TeleBot(access_key)
 
 def rating():
