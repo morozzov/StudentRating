@@ -42,4 +42,13 @@ public class ApiController {
         return studentDtoList;
     }
 
+    @GetMapping("/getByLogin/{login}")
+    public StudentDTO getByLogin(@PathVariable("login") String login) {
+        Student student = studentsRepository.findByLogin(login);
+
+        StudentDTO studentDTO = new StudentDTO(student);
+
+        return studentDTO;
+    }
+
 }

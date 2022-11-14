@@ -9,4 +9,5 @@ import java.util.ArrayList;
 public interface StudentsRepository extends CrudRepository<Student, Long> {
 
     ArrayList<Student> findAll(Sort points);
+    Student findByLogin(String login);
 }
