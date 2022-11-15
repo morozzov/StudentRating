@@ -1,16 +1,16 @@
 package com.example.studentrating.controllers;
 
-import com.example.studentrating.dtos.StudentDTO;
+import com.example.studentrating.dto.StudentDTO;
 import com.example.studentrating.models.Student;
 import com.example.studentrating.repositories.StudentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 @RestController
@@ -30,8 +30,8 @@ public class ApiController {
     }
 
     @GetMapping("/getAll")
-    public ArrayList<StudentDTO>  getAll() {
-        ArrayList<Student> students = studentsRepository.findAll(Sort.by(Sort.Direction.DESC,"points"));
+    public ArrayList<StudentDTO> getAll() {
+        ArrayList<Student> students = studentsRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
 
         ArrayList<StudentDTO> studentDtoList = new ArrayList<>();
 
@@ -51,4 +51,51 @@ public class ApiController {
         return studentDTO;
     }
 
+    @PostMapping("/signIn")
+    public String signIn(String login, String password, HttpSession session) {
+//        model.addAttribute("title", "Авторизация");
+        Student student = studentsRepository.findByLoginAndPassword(login, encryptText(password));
+        if (student != null) {
+            setSession(session, student.getId(), "STUDENT");
+            return "success";
+        } else {
+            return "error";
+        }
+    }
+
+    @PostMapping("/signOut")
+    public String signOut(HttpSession request) {
+        try {
+            request.setAttribute("id", null);
+            request.setAttribute("type", null);
+            return "success";
+        } catch (Exception e) {
+            return "e.getMessage()";
+        }
+    }
+
+    private void setSession(HttpSession request, Long id, String type) {
+        request.setAttribute("id", id);
+        request.setAttribute("type", type);
+    }
+
+    private static String encryptText(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            String hashText = no.toString(16);
+
+            while (hashText.length() < 32) {
+                hashText = "0" + hashText;
+            }
+
+            return hashText;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

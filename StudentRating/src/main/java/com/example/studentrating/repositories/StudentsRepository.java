@@ -10,4 +10,5 @@ public interface StudentsRepository extends CrudRepository<Student, Long> {
 
     ArrayList<Student> findAll(Sort points);
     Student findByLogin(String login);
+    Student findByLoginAndPassword(String login, String password);
 }

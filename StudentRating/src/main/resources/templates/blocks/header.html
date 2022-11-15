@@ -70,20 +70,39 @@
                 </div>
             </div>
 
-
+            <script>
+                $(function () {
+                    $('form').on('submit', function (e) {
+                        e.preventDefault();
+                        $.ajax({
+                            type: 'post',
+                            url: '/api/signOut',
+                            data: $('form').serialize()
+                            ,
+                            success: function (data) {
+                                if (data == 'success') {
+                                    window.location = '/students/getAll'
+                                } else {
+                                    alert("data")
+                                }
+                            }
+                        });
+                    });
+                });
+            </script>
             <div class="dropdown text-end">
-                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+                <a href="/students/getMyProfile" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
                    aria-expanded="false">
                     <img src="/img/avatars/personal.svg" alt="mdo" width="40" height="40"
                          class="rounded-circle bg-light">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small" style="">
-                    <li><a class="dropdown-item" href="/students/getById/1">Профиль</a></li>
+                    <li><a class="dropdown-item" href="/students/getMyProfile">Профиль</a></li>
                     <li><a class="dropdown-item" href="/students/getSettingsById">Настройки</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="#">Выход</a></li>
+                    <li><form method="post"><button type="submit" class="dropdown-item" href="#">Выход</button></form></li>
                 </ul>
             </div>
         </div>

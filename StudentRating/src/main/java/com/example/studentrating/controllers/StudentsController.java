@@ -6,13 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/students")
@@ -22,30 +19,58 @@ public class StudentsController {
     private StudentsRepository studentsRepository;
 
     @GetMapping("/getById/{id}")
-    public String getById(@PathVariable("id") Long id, Model model) {
-        Student student = studentsRepository.findById(id).get();
-        model.addAttribute("title", "Профиль");
-        model.addAttribute("student", student);
-        return "profile";
+    public String getById(@PathVariable("id") Long id, Model model, HttpSession session) {
+        if (isAuthorize(session)) {
+            Student student = studentsRepository.findById(id).get();
+            model.addAttribute("title", "Профиль");
+            model.addAttribute("student", student);
+            return "profile";
+        } else return "redirect:/pages/signIn";
     }
 
     @GetMapping("/getAll")
-    public String getAll(Model model) {
-        ArrayList<Student> students = studentsRepository.findAll(Sort.by(Sort.Direction.DESC,"points"));
-        model.addAttribute("title", "Рейтинг");
-        model.addAttribute("students", students);
-        return "rating";
+    public String getAll(Model model, HttpSession session) {
+        if (isAuthorize(session)) {
+            ArrayList<Student> students = studentsRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+            model.addAttribute("title", "Рейтинг");
+            model.addAttribute("students", students);
+            return "rating";
+        } else return "redirect:/pages/signIn";
     }
 
+    @GetMapping("/getMyProfile")
+    public String getById( Model model, HttpSession session) {
+        if (isAuthorize(session)) {
+            Student student = studentsRepository.findById(getSessionId(session)).get();
+            model.addAttribute("title", "Мой профиль");
+            model.addAttribute("student", student);
+            return "profile";
+        } else return "redirect:/pages/signIn";
+    }
     @GetMapping("/getSettingsById")
-    public String getSettingsById(Model model) {
-        model.addAttribute("title", "Настройки");
-        return "settings";
+    public String getSettingsById(Model model, HttpSession session) {
+        if (isAuthorize(session)) {
+            model.addAttribute("title", "Настройки");
+            return "settings";
+        } else return "redirect:/pages/signIn";
     }
 
-    @GetMapping("/signIn")
-    public String signIn(Model model) {
-        model.addAttribute("title", "Авторизация");
-        return "signIn";
+    public void setSession(HttpSession request, Long id) {
+        request.setAttribute("id", id);
+        request.setAttribute("type", "student");
+    }
+
+    public boolean isAuthorize(HttpSession request) {
+        if (request.getAttribute("id") != null && request.getAttribute("type") != null) return true;
+        else return false;
+    }
+
+    public void signOut(HttpSession request) {
+        request.setAttribute("id", null);
+        request.setAttribute("type", null);
+    }
+
+    public Long getSessionId(HttpSession request) {
+        return (Long) request.getAttribute("id");
     }
 }

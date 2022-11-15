@@ -1,4 +1,4 @@
-package com.example.studentrating.dtos;
+package com.example.studentrating.dto;
 
 import com.example.studentrating.models.Student;
 import lombok.AllArgsConstructor;

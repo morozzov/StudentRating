@@ -6,6 +6,30 @@
 </head>
 <body class="text-center">
 <main class="form-signin">
+    <script>
+        $(function () {
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+                if ($("#login").val() != "" && $("#password").val() != "") {
+                    $.ajax({
+                        type: 'post',
+                        url: '/api/signIn',
+                        data: $('form').serialize()
+                        ,
+                        success: function (data) {
+                            if (data == 'success') {
+                                window.location = '/students/getAll'
+                            } else {
+                                alert("Login or password not right")
+                            }
+                        }
+                    });
+                } else {
+                    alert("Enter login and password")
+                }
+            });
+        });
+    </script>
     <form method="post" action="/users/auth">
         <img class="mb-4" th:src="@{/img/SRlogoDark.svg}" alt="" width="72" height="72">
         <h1 class="h3 mb-3 fw-normal">Автризация</h1>
