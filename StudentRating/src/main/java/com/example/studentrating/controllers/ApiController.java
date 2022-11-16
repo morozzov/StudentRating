@@ -53,7 +53,6 @@ public class ApiController {
 
     @PostMapping("/signIn")
     public String signIn(String login, String password, HttpSession session) {
-//        model.addAttribute("title", "Авторизация");
         Student student = studentsRepository.findByLoginAndPassword(login, encryptText(password));
         if (student != null) {
             setSession(session, student.getId(), "STUDENT");

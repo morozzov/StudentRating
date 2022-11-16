@@ -7,18 +7,18 @@
     <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
         <h1 th:text="${title}"></h1>
         <hr>
-
-        <div class="container">
+        <div th:each="respond : ${responds}" class="container">
             <div class="card bg-light mb-3">
-                <div class="card-header text-center">
+                <div th:text="${respond.getTask.getTitle()}" class="card-header text-center">
                     Помочь
                 </div>
                 <div class="card-body">
                     <div class="col">
                         <div class="row justify-content-center align-items-center align-items-center">
-                            <p class="col text-start">Заказчик: Петров И.В.</p>
-                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>
-                            <p class="col text-end">Стоимость: 1</p>
+                            <p th:text="'Заказчик: ' + ' ' + ${respond.getTask.getAuthor().getSurname()} + ' ' + ${respond.getTask.getAuthor().getName()} + ' ' + ${respond.getTask.getAuthor().getPatronymic()}"
+                               class="col text-start"></p>
+                            <p th:text="'Крайний срок: ' + ${respond.getTask.getDeadLine()}" class="col text-center"></p>
+                            <p th:text="'Стоимость: ' + ${respond.getTask.getCost()}" class="col text-end"></p>
                         </div>
                         <div class="d-grid">
                             <button class="btn btn-outline-danger" type="button">Отказаться(-1)</button>
@@ -26,9 +26,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </main>
 <footer th:replace="blocks/footer :: footer"></footer>
