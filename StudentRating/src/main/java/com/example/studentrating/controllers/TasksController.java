@@ -29,8 +29,12 @@ public class TasksController {
         if (isAuthorize(session)) {
             ArrayList<Task> tasks = tasksRepository.findAllByStudentCountIsNot(Sort.by(Sort.Direction.ASC, "deadLine"), 0);
             ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(getSessionId(session), "BUSY");
+            ArrayList<Long> respondsIds = new ArrayList<>();
+            for (Respond r : responds) {
+                if (r.getExecutor().getId() == getSessionId(session)) respondsIds.add(r.getTask().getId());
+            }
             model.addAttribute("tasks", tasks);
-            model.addAttribute("responds", responds);
+            model.addAttribute("respondsIds", respondsIds);
             model.addAttribute("title", "Поручения");
             return "tasks";
         } else return "redirect:/pages/signIn";

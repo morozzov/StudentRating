@@ -13,53 +13,23 @@
                 <div th:text="${task.getTitle()}" class="card-header text-center"></div>
                 <div class="card-body">
                     <div class="col">
-                        <div class="row justify-content-center align-items-center align-items-center">
-                                <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()} + ' ' + ${task.getAuthor().getPatronymic()}" class="col text-start"></p>
-                                <p th:text="'Крайний срок: ' + ${task.getDeadLine()}" class="col text-center"></p>
-                                <p th:text="'Стоимость: ' + ${task.getCost()}" class="col text-end"></p>
+                        <div class="row justify-content-between">
+                            <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()[0]} + '.' + ${task.getAuthor().getPatronymic()[0]} + '.'"
+                               class="col-auto text-start"></p>
+                            <p th:text="'Крайний срок: ' + ${task.getDeadLine().toLocalDate()} + ' ' + ${ task.getDeadLine().toLocalTime()}"
+                               class="col-auto text-center"></p>
+                            <p th:text="'Осталось мест: ' + ${task.getStudentCount()}" class="col-auto text-end"></p>
+                            <p th:text="'Стоимость: ' + ${task.getCost()}" class="col-auto text-end"></p>
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-outline-success" type="button">Откликнуться</button>
+                            <button th:disabled="${respondsIds.contains(task.getId())} ? 'true' : 'false'"
+                                    th:class="${respondsIds.contains(task.getId())} ? 'btn btn-outline-dark':'btn btn-outline-success'"
+                                    th:text="${respondsIds.contains(task.getId())} ? 'Вы уже откликнулись':'Откликнуться'"
+                                    type="button"></button>
                         </div>
                     </div>
                 </div>
             </div>
-
-<!--            <div class="card bg-light mb-3">-->
-<!--                <div class="card-header text-center">-->
-<!--                    Помочь-->
-<!--                </div>-->
-<!--                <div class="card-body">-->
-<!--                    <div class="col">-->
-<!--                        <div class="row justify-content-center align-items-center align-items-center">-->
-<!--                            <p class="col text-start">Заказчик: Петров И.В.</p>-->
-<!--                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>-->
-<!--                            <p class="col text-end">Стоимость: 1</p>-->
-<!--                        </div>-->
-<!--                        <div class="d-grid">-->
-<!--                            <button class="btn btn-outline-danger disabled" type="button">Занято</button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="card bg-light mb-3">-->
-<!--                <div class="card-header text-center">-->
-<!--                    Помочь-->
-<!--                </div>-->
-<!--                <div class="card-body">-->
-<!--                    <div class="col">-->
-<!--                        <div class="row justify-content-center align-items-center align-items-center">-->
-<!--                            <p class="col text-start">Заказчик: Петров И.В.</p>-->
-<!--                            <p class="col text-center">Крайний срок: 22.10.2022 22:12</p>-->
-<!--                            <p class="col text-end">Стоимость: 1</p>-->
-<!--                        </div>-->
-<!--                        <div class="d-grid">-->
-<!--                            <button class="btn btn-outline-secondary disabled" type="button">Занято вами</button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
 
     </div>
