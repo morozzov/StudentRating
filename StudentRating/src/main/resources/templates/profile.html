@@ -36,17 +36,17 @@
         <h2>Активность</h2>
         <hr>
 
-        <div class="container">
+        <div th:each="activity : ${activities}" class="container">
             <div class="card bg-light mb-3">
                 <div class="card-body">
                     <div class="col">
                         <div class="row justify-content-center align-items-center align-items-center">
-                            <p class="col text-start">22.10.2022 22:12</p>
-                            <p class="col text-center">Помочь</p>
-                            <p class="col text-end">+1</p>
+                            <p th:text="${activity.getCreatedAt().toLocalDate()} + ' ' + ${activity.getCreatedAt().toLocalTime()}" class="col text-start"></p>
+                            <p th:text="${activity.getTitle()}" class="col text-center"></p>
+                            <p th:text="${activity.getCost()}" class="col text-end"></p>
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-outline-danger" type="button">Оспорить</button>
+                            <button th:hidden="${buttonsHidden}" class="btn btn-outline-danger" type="button">Оспорить</button>
                         </div>
                     </div>
                 </div>
