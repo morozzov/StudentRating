@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
-public interface TasksRepository  extends CrudRepository<Task, Long> {
+public interface TaskRepository extends CrudRepository<Task, Long> {
 
     ArrayList<Task> findAllByStudentCountIsNot(Sort deadLin, int count);
 }

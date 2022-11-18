@@ -1,6 +1,6 @@
 package com.example.studentrating.controllers;
 
-import com.example.studentrating.repositories.StudentsRepository;
+import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class PagesController {
 
     @Autowired
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentRepository;
 
     @GetMapping("/about")
     public String about(Model model, HttpSession session) {

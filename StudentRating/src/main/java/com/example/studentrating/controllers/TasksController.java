@@ -3,7 +3,7 @@ package com.example.studentrating.controllers;
 import com.example.studentrating.models.Respond;
 import com.example.studentrating.models.Task;
 import com.example.studentrating.repositories.RespondRepository;
-import com.example.studentrating.repositories.TasksRepository;
+import com.example.studentrating.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class TasksController {
 
     @Autowired
-    private TasksRepository tasksRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
     private RespondRepository respondRepository;
@@ -27,7 +27,7 @@ public class TasksController {
     @GetMapping("/getAll")
     public String getAll(Model model, HttpSession session) {
         if (isAuthorize(session)) {
-            ArrayList<Task> tasks = tasksRepository.findAllByStudentCountIsNot(Sort.by(Sort.Direction.ASC, "deadLine"), 0);
+            ArrayList<Task> tasks = taskRepository.findAllByStudentCountIsNot(Sort.by(Sort.Direction.ASC, "deadLine"), 0);
             ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(getSessionId(session), "BUSY");
             ArrayList<Long> respondsIds = new ArrayList<>();
             for (Respond r : responds) {

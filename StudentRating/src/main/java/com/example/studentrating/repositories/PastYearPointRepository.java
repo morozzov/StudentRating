@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
-public interface PastYearPointsRepository extends CrudRepository<PastYearPoints, Long> {
+public interface PastYearPointRepository extends CrudRepository<PastYearPoints, Long> {
 
     ArrayList<PastYearPoints> findAllByStudent_Id(Sort year, Long studentId);
 }
