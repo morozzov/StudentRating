@@ -1,6 +1,8 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.models.PastYearPoints;
 import com.example.studentrating.models.Student;
+import com.example.studentrating.repositories.PastYearPointsRepository;
 import com.example.studentrating.repositories.StudentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,11 +20,17 @@ public class StudentsController {
     @Autowired
     private StudentsRepository studentsRepository;
 
+    @Autowired
+    private PastYearPointsRepository pastYearPointsRepository;
+
     @GetMapping("/getById/{id}")
     public String getById(@PathVariable("id") Long id, Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentsRepository.findById(id).get();
-            model.addAttribute("title", "Профиль");
+            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            model.addAttribute("title","Профиль");
+//            model.addAttribute("title", id == getSessionId(session) ? "Мой профиль" : "Профиль");
+            model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);
             return "profile";
         } else return "redirect:/pages/signIn";
@@ -39,14 +47,17 @@ public class StudentsController {
     }
 
     @GetMapping("/getMyProfile")
-    public String getById( Model model, HttpSession session) {
+    public String getById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentsRepository.findById(getSessionId(session)).get();
+            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent(Sort.by(Sort.Direction.DESC, "year"), student.getId());
             model.addAttribute("title", "Мой профиль");
+            model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);
             return "profile";
         } else return "redirect:/pages/signIn";
     }
+
     @GetMapping("/getSettingsById")
     public String getSettingsById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
