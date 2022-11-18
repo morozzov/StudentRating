@@ -2,8 +2,8 @@ package com.example.studentrating.controllers;
 
 import com.example.studentrating.models.PastYearPoints;
 import com.example.studentrating.models.Student;
-import com.example.studentrating.repositories.PastYearPointsRepository;
-import com.example.studentrating.repositories.StudentsRepository;
+import com.example.studentrating.repositories.PastYearPointRepository;
+import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -18,16 +18,16 @@ import java.util.ArrayList;
 public class StudentsController {
 
     @Autowired
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentRepository;
 
     @Autowired
-    private PastYearPointsRepository pastYearPointsRepository;
+    private PastYearPointRepository pastYearPointRepository;
 
     @GetMapping("/getById/{id}")
     public String getById(@PathVariable("id") Long id, Model model, HttpSession session) {
         if (isAuthorize(session)) {
-            Student student = studentsRepository.findById(id).get();
-            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            Student student = studentRepository.findById(id).get();
+            ArrayList<PastYearPoints> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
             model.addAttribute("title", id.equals(getSessionId(session)) ? "Мой профиль" : "Профиль");
             model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);
@@ -38,7 +38,7 @@ public class StudentsController {
     @GetMapping("/getAll")
     public String getAll(Model model, HttpSession session) {
         if (isAuthorize(session)) {
-            ArrayList<Student> students = studentsRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+            ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
             model.addAttribute("title", "Рейтинг");
             model.addAttribute("students", students);
             return "rating";
@@ -48,8 +48,8 @@ public class StudentsController {
     @GetMapping("/getMyProfile")
     public String getById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
-            Student student = studentsRepository.findById(getSessionId(session)).get();
-            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            Student student = studentRepository.findById(getSessionId(session)).get();
+            ArrayList<PastYearPoints> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
             model.addAttribute("title", "Мой профиль");
             model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);

@@ -2,7 +2,7 @@ package com.example.studentrating.controllers;
 
 import com.example.studentrating.dto.StudentDTO;
 import com.example.studentrating.models.Student;
-import com.example.studentrating.repositories.StudentsRepository;
+import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +18,11 @@ import java.util.ArrayList;
 public class ApiController {
 
     @Autowired
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentRepository;
 
     @GetMapping("/getById/{id}")
     public StudentDTO getById(@PathVariable("id") Long id) {
-        Student student = studentsRepository.findById(id).get();
+        Student student = studentRepository.findById(id).get();
 
         StudentDTO studentDTO = new StudentDTO(student);
 
@@ -31,7 +31,7 @@ public class ApiController {
 
     @GetMapping("/getAll")
     public ArrayList<StudentDTO> getAll() {
-        ArrayList<Student> students = studentsRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+        ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
 
         ArrayList<StudentDTO> studentDtoList = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class ApiController {
 
     @GetMapping("/getByLogin/{login}")
     public StudentDTO getByLogin(@PathVariable("login") String login) {
-        Student student = studentsRepository.findByLogin(login);
+        Student student = studentRepository.findByLogin(login);
 
         StudentDTO studentDTO = new StudentDTO(student);
 
@@ -53,7 +53,7 @@ public class ApiController {
 
     @PostMapping("/signIn")
     public String signIn(String login, String password, HttpSession session) {
-        Student student = studentsRepository.findByLoginAndPassword(login, encryptText(password));
+        Student student = studentRepository.findByLoginAndPassword(login, encryptText(password));
         if (student != null) {
             setSession(session, student.getId(), "STUDENT");
             return "success";
