@@ -27,9 +27,8 @@ public class StudentsController {
     public String getById(@PathVariable("id") Long id, Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentsRepository.findById(id).get();
-            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent(Sort.by(Sort.Direction.DESC, "year"), student.getId());
-            model.addAttribute("title","Профиль");
-//            model.addAttribute("title", id == getSessionId(session) ? "Мой профиль" : "Профиль");
+            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            model.addAttribute("title", id.equals(getSessionId(session)) ? "Мой профиль" : "Профиль");
             model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);
             return "profile";
@@ -50,7 +49,7 @@ public class StudentsController {
     public String getById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentsRepository.findById(getSessionId(session)).get();
-            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            ArrayList<PastYearPoints> pastYearPoints = pastYearPointsRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
             model.addAttribute("title", "Мой профиль");
             model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);

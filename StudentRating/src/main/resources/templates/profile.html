@@ -19,35 +19,16 @@
                 <h5 th:text="${student.points} + ' очков'"></h5>
             </div>
 
-            <div  th:each="point : ${pastYearPoints}" class="col-auto overflow-auto pt-4"
+            <div class="col-3 overflow-auto pt-4"
                  style="max-height: 8rem">
-                <div class="card bg-light mb-3">
-                    <div class="card-body row pt-0 pb-0">
-                        <p th:text="${point.getYear().getYear()}" class="col-auto text-start"></p>
-                        <p th:text="${point.getPoints()} + 'очков'" class="col text-end"></p>
+                <div th:each="point : ${pastYearPoints}">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body row pt-0 pb-0">
+                            <p th:text="'Год: ' + ${point.getYear().getYear()}" class="col-auto text-start"></p>
+                            <p th:text="'Очки: ' + ${point.getPoints()}" class="col text-end"></p>
+                        </div>
                     </div>
                 </div>
-
-<!--                <div class="card bg-light mb-3">-->
-<!--                    <div class="card-body row pt-0 pb-0">-->
-<!--                        <p class="col-auto text-start">2021</p>-->
-<!--                        <p class="col text-end">89 очков</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <div class="card bg-light mb-3">-->
-<!--                    <div class="card-body row pt-0 pb-0">-->
-<!--                        <p class="col-auto text-start">2021</p>-->
-<!--                        <p class="col text-end">89 очков</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <div class="card bg-light mb-3">-->
-<!--                    <div class="card-body row pt-0 pb-0">-->
-<!--                        <p class="col-auto text-start">2021</p>-->
-<!--                        <p class="col text-end">89 очков</p>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
 
         </div>
