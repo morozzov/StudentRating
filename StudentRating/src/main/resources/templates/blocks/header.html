@@ -1,7 +1,7 @@
 <header class="p-3 text-bg-dark" th:fragment="header">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <a href="/students/getAll" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                 <img th:src="@{/img/SRlogo.svg}" alt="StudentRating" class="bi me-2" width="40" height="40" role="img"
                      aria-label="StudentRating">
             </a>
@@ -27,57 +27,73 @@
             <!--                <button type="button" class="btn btn-warning">Регистрация</button>-->
             <!--            </div>-->
 
+            <script>
+                $(function () {
+                    $(document).on('submit', '#formNotification', function (e) {
+                        e.preventDefault();
+                        $.ajax({
+                            type: 'delete',
+                            url: '/api/deleteNotification',
+                            data: $('#formNotification').serialize()
+                            ,
+                            success: function (data) {
+                                if (data == 'success') {
+                                    $('#formNotification').parent('div').remove();
+                                    document.getElementById("count").innerHTML = document.getElementById("count").textContent - 1
+                                    $('#notifications').addClass('show')
+                                } else {
+                                    alert("data")
+                                }
+                            }
+                        });
+                    });
+                })
+                ;
+            </script>
             <div class="dropdown text-end">
                 <button type="button" class="btn btn-sm btn-outline-light position-relative me-4 dropdown-toggle"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
                     Уведомления
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span th:text="${notifications.size()}" id="count"
+                          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     7
                     <span class="visually-hidden">Непрочитанные уведомления</span>
                 </span>
                 </button>
 
-                <div class="dropdown-menu dropdown-menu-dark text-end" style="">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
-                    <p class="p-1 dropdown-item">-2 очка (пропуск занятия)<span
-                            class="badge text-muted me-2">12.10.22 18:14</span><span
-                            class="btn btn-sm btn-outline-danger badge">x</span></p>
-                    <hr class="dropdown-divider">
+                <div class="dropdown-menu dropdown-menu-dark text-end" id="notifications"
+                     style="">
+                    <div th:each="notification : ${notifications}" th:id="${notification.getId()}"
+                         class=" dropdown-item">
+                        <form method="delete" id="formNotification">
+                            <input th:value="${notification.getId()}" type="hidden" id="notificationId"
+                                   name="notificationId"/>
+                            <p>
+                        <span th:text="${notification.getCost() >= 0 ? '+' : ''} + ${notification.getCost()} + ' очков (' + ${notification.getTitle()} + ')'"
+                        ></span>
+                                <span
+                                        th:text="${notification.getCreatedAt().toLocalDate()} + ' ' + ${notification.getCreatedAt().toLocalTime()}"
+                                        class="badge text-muted"></span>
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger badge">x
+                                </button>
+                            </p>
+                            <hr class="dropdown-divider">
+                        </form>
+
+                    </div>
                 </div>
             </div>
 
             <script>
                 $(function () {
-                    $('form').on('submit', function (e) {
+                    $('#formSignOut').on('submit', function (e) {
                         e.preventDefault();
                         $.ajax({
                             type: 'post',
                             url: '/api/signOut',
-                            data: $('form').serialize()
+                            data: $('#formSignOut').serialize()
                             ,
                             success: function (data) {
                                 if (data == 'success') {
@@ -91,7 +107,8 @@
                 });
             </script>
             <div class="dropdown text-end">
-                <a href="/students/getMyProfile" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+                <a href="/students/getMyProfile" class="d-block link-light text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown"
                    aria-expanded="false">
                     <img src="/img/avatars/personal.svg" alt="mdo" width="40" height="40"
                          class="rounded-circle bg-light">
@@ -102,7 +119,11 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><form method="post"><button type="submit" class="dropdown-item" href="#">Выход</button></form></li>
+                    <li>
+                        <form method="post" id="formSignOut">
+                            <button type="submit" class="dropdown-item" href="#">Выход</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

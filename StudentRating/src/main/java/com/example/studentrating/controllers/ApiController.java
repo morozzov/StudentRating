@@ -2,6 +2,7 @@ package com.example.studentrating.controllers;
 
 import com.example.studentrating.dto.StudentDTO;
 import com.example.studentrating.models.Student;
+import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,9 @@ public class ApiController {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @GetMapping("/getById/{id}")
     public StudentDTO getById(@PathVariable("id") Long id) {
@@ -67,6 +71,16 @@ public class ApiController {
         try {
             request.setAttribute("id", null);
             request.setAttribute("type", null);
+            return "success";
+        } catch (Exception e) {
+            return "e.getMessage()";
+        }
+    }
+
+    @DeleteMapping("/deleteNotification")
+    public String deleteNotification(Long notificationId ,HttpSession request) {
+        try {
+           notificationRepository.deleteById(notificationId);
             return "success";
         } catch (Exception e) {
             return "e.getMessage()";

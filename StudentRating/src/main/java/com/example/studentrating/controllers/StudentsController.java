@@ -1,9 +1,11 @@
 package com.example.studentrating.controllers;
 
 import com.example.studentrating.models.Activity;
-import com.example.studentrating.models.PastYearPoints;
+import com.example.studentrating.models.Notification;
+import com.example.studentrating.models.PastYearPoint;
 import com.example.studentrating.models.Student;
 import com.example.studentrating.repositories.ActivityRepository;
+import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.PastYearPointRepository;
 import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +30,17 @@ public class StudentsController {
     @Autowired
     private ActivityRepository activityRepository;
 
+    @Autowired
+    private NotificationRepository notificationRepository;
+
     @GetMapping("/getById/{id}")
     public String getById(@PathVariable("id") Long id, Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentRepository.findById(id).get();
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
             ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
-            ArrayList<PastYearPoints> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            model.addAttribute("notifications", notifications);
             model.addAttribute("title", id.equals(getSessionId(session)) ? "Мой профиль" : "Профиль");
             model.addAttribute("buttonsHidden", !id.equals(getSessionId(session)));
             model.addAttribute("activities", activities);
@@ -47,6 +54,8 @@ public class StudentsController {
     public String getAll(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+            model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Рейтинг");
             model.addAttribute("students", students);
             return "rating";
@@ -57,8 +66,10 @@ public class StudentsController {
     public String getById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentRepository.findById(getSessionId(session)).get();
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
             ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
-            ArrayList<PastYearPoints> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Мой профиль");
             model.addAttribute("activities", activities);
             model.addAttribute("pastYearPoints", pastYearPoints);
@@ -70,6 +81,8 @@ public class StudentsController {
     @GetMapping("/getSettingsById")
     public String getSettingsById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+            model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Настройки");
             return "settings";
         } else return "redirect:/pages/signIn";

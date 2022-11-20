@@ -1,7 +1,9 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
 import com.example.studentrating.models.Task;
+import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.RespondRepository;
 import com.example.studentrating.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class TasksController {
     @Autowired
     private RespondRepository respondRepository;
 
+    @Autowired
+    private NotificationRepository notificationRepository;
+
     @GetMapping("/getAll")
     public String getAll(Model model, HttpSession session) {
         if (isAuthorize(session)) {
@@ -33,6 +38,8 @@ public class TasksController {
             for (Respond r : responds) {
                 if (r.getExecutor().getId() == getSessionId(session)) respondsIds.add(r.getTask().getId());
             }
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+            model.addAttribute("notifications", notifications);
             model.addAttribute("tasks", tasks);
             model.addAttribute("respondsIds", respondsIds);
             model.addAttribute("title", "Поручения");
@@ -44,6 +51,8 @@ public class TasksController {
     public String getByUser(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(getSessionId(session), "BUSY");
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+            model.addAttribute("notifications", notifications);
             model.addAttribute("responds", responds);
             model.addAttribute("title", "Мои поручения");
             return "myTasks";
