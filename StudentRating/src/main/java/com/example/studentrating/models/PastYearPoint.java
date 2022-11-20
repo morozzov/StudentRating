@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PastYearPoints {
+public class PastYearPoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
