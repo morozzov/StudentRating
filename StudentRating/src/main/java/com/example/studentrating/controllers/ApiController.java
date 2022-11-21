@@ -7,8 +7,10 @@ import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -77,10 +79,26 @@ public class ApiController {
         }
     }
 
-    @DeleteMapping("/deleteNotification")
-    public String deleteNotification(Long notificationId ,HttpSession request) {
+    @PostMapping("/updateProfile")
+    public String updateProfile(String login, String password1, HttpSession session) {
         try {
-           notificationRepository.deleteById(notificationId);
+            // image - null, password1 = ""
+            if (login != "" || password1 != "") {
+                Student student = studentRepository.findById(getSessionId(session)).get();
+                if (login != "") student.setLogin(login);
+                if (password1 != "") student.setPassword(encryptText(password1));
+                studentRepository.save(student);
+            }
+            return "success";
+        } catch (Exception e) {
+            return "e.getMessage()";
+        }
+    }
+
+    @DeleteMapping("/deleteNotification")
+    public String deleteNotification(Long notificationId) {
+        try {
+            notificationRepository.deleteById(notificationId);
             return "success";
         } catch (Exception e) {
             return "e.getMessage()";
@@ -90,6 +108,10 @@ public class ApiController {
     private void setSession(HttpSession request, Long id, String type) {
         request.setAttribute("id", id);
         request.setAttribute("type", type);
+    }
+
+    public Long getSessionId(HttpSession request) {
+        return (Long) request.getAttribute("id");
     }
 
     private static String encryptText(String input) {

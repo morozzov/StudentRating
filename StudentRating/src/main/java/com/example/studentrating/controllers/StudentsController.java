@@ -81,8 +81,10 @@ public class StudentsController {
     @GetMapping("/getSettingsById")
     public String getSettingsById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
+            Student student = studentRepository.findById(getSessionId(session)).get();
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
             model.addAttribute("notifications", notifications);
+            model.addAttribute("student", student);
             model.addAttribute("title", "Настройки");
             return "settings";
         } else return "redirect:/pages/signIn";

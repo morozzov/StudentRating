@@ -8,23 +8,50 @@
         <h1 th:text="${title}" class="text-center"></h1>
         <hr>
 
+        <script>
+            $(function () {
+                $(document).on('submit', 'form', function (e) {
+                    e.preventDefault();
+                    if ($('#inputPassword1').val() == $('#inputPasswordAgain2').val()) {
+
+                        $.ajax({
+                            type: 'post',
+                            url: '/api/updateProfile',
+                            data: $('form').serialize()
+                            ,
+                            success: function (data) {
+                                if (data == 'success') {
+                                    alert("success")
+                                } else {
+                                    alert("data")
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Введите одинаковые пароли")
+                    }
+                });
+            })
+            ;
+        </script>
         <div class="d-flex justify-content-center mb-3">
-            <form method="" action="" class="col">
+            <form method="post" class="col">
                 <div class="row">
 
                     <div class="col">
                         <div class="row justify-content-center">
-                            <img src="/img/avatars/personal.svg" alt="mdo" width="140"
+                            <img th:src="${student.imageUrl}" alt="mdo" width="140"
                                  height="140"
-                                 class="rounded-circle mb-3 w-auto" id="photo">
+                                 class="rounded-circle mb-3 w-auto" id="image">
                         </div>
                         <div class="mb-3 w-auto">
-                            <input class="form-control" type="file" id="formFile" accept=".jpg, .jpeg, .png, .svg"
+                            <input class="form-control" type="file" id="formFile" name="image"
+                                   accept=".jpg, .jpeg, .png, .svg"
                                    onchange="loadFile(event)">
                         </div>
                         <script>
                             var loadFile = function (event) {
-                                var output = document.getElementById('photo');
+                                var output = document.getElementById('image');
                                 output.src = URL.createObjectURL(event.target.files[0]);
                                 output.onload = function () {
                                     URL.revokeObjectURL(output.src) // free memory
@@ -37,20 +64,21 @@
                         <div class="mb-2 mt-1 input-group flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">@</span>
                             <div class="form-floating ">
-                                <input name="login" type="email" class="form-control" placeholder="login"
+                                <input th:value="${student.getLogin()}" name="login" type="text" class="form-control"
+                                       placeholder="login"
                                        id="inputLogin">
                                 <label name="login" for="inputLogin">Логин</label>
                             </div>
                         </div>
                         <div class="form-floating mb-2">
-                            <input name="password" type="password" class="form-control" placeholder="Password"
-                                   id="inputPassword">
-                            <label name="password" for="inputPassword">Пароль</label>
+                            <input name="password1" type="password" class="form-control" placeholder="Password"
+                                   id="inputPassword1">
+                            <label name="password" for="inputPassword1">Пароль</label>
                         </div>
                         <div class="form-floating ">
-                            <input name="password" type="password" class="form-control" placeholder="Password"
-                                   id="inputPasswordAgain">
-                            <label name="password" for="inputPasswordAgain">Пароль снова</label>
+                            <input name="password2" type="password" class="form-control" placeholder="Password"
+                                   id="inputPasswordAgain2">
+                            <label name="password" for="inputPasswordAgain2">Пароль снова</label>
                         </div>
                     </div>
                 </div>
