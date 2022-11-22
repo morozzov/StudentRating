@@ -24,6 +24,7 @@
                                 button.prop("disabled", true);
                                 button.toggleClass('btn-outline-success btn-outline-dark');
                                 button.text('Вы уже откликнулись');
+                                alert('Отклик успешно создан')
                             } else if (data == "Вы уже откликнулись на данное поручение") {
                                 var button = $form.find("button");
                                 button.prop("disabled", true);
