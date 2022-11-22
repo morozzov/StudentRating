@@ -8,30 +8,65 @@
         <h1 th:text="${title}"></h1>
         <hr>
 
-        <div th:each="task : ${tasks}" class="container">
-            <div class="card bg-light mb-3">
-                <div th:text="${task.getTitle()}" class="card-header text-center"></div>
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row justify-content-between">
-                            <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()[0]} + '.' + ${task.getAuthor().getPatronymic()[0]} + '.'"
-                               class="col-auto text-start"></p>
-                            <p th:text="'Крайний срок: ' + ${task.getDeadLine().toLocalDate()} + ' ' + ${ task.getDeadLine().toLocalTime()}"
-                               class="col-auto text-center"></p>
-                            <p th:text="'Осталось мест: ' + ${task.getStudentCount()}" class="col-auto text-end"></p>
-                            <p th:text="'Стоимость: ' + ${task.getCost()}" class="col-auto text-end"></p>
-                        </div>
-                        <div class="d-grid">
-                            <button th:disabled="${respondsIds.contains(task.getId())} ? 'true' : 'false'"
-                                    th:class="${respondsIds.contains(task.getId())} ? 'btn btn-outline-dark':'btn btn-outline-success'"
-                                    th:text="${respondsIds.contains(task.getId())} ? 'Вы уже откликнулись':'Откликнуться'"
-                                    type="button"></button>
+        <script>
+            $(function () {
+                $(document).on('submit', '#formTask', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/tasksRest/makeRespondByUserAndTask',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                var button = $form.find("button");
+                                button.prop("disabled", true);
+                                button.toggleClass('btn-outline-success btn-outline-dark');
+                                button.text('Вы уже откликнулись');
+                            } else if (data == "Вы уже откликнулись на эту задачу"){
+                                var button = $form.find("button");
+                                button.prop("disabled", true);
+                                button.toggleClass('btn-outline-success btn-outline-dark');
+                                button.text('Вы уже откликнулись');
+                                alert(data)
+                            }
+                        }
+                    });
+                });
+            })
+            ;
+        </script>
+        <div class="container">
+            <div th:each="task : ${tasks}">
+                <form method="post" id="formTask">
+                    <div class="card bg-light mb-3">
+                        <div th:text="${task.getTitle()}" class="card-header text-center"></div>
+                        <div class="card-body">
+                            <div class="col">
+                                <div class="row justify-content-between">
+                                    <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()[0]} + '.' + ${task.getAuthor().getPatronymic()[0]} + '.'"
+                                       class="col-auto text-start"></p>
+                                    <p th:text="'Крайний срок: ' + ${task.getDeadLine().toLocalDate()} + ' ' + ${ task.getDeadLine().toLocalTime()}"
+                                       class="col-auto text-center"></p>
+                                    <p th:text="'Осталось мест: ' + ${task.getStudentCount()}"
+                                       class="col-auto text-end"></p>
+                                    <p th:text="'Стоимость: ' + ${task.getCost()}" class="col-auto text-end"></p>
+                                </div>
+                                <div class="d-grid">
+                                    <input th:value="${task.getId()}" type="hidden" id="taskId"
+                                           name="taskId"/>
+                                    <button th:disabled="${respondsIds.contains(task.getId())} ? 'true' : 'false'"
+                                            th:class="${respondsIds.contains(task.getId())} ? 'btn btn-outline-dark':'btn btn-outline-success'"
+                                            th:text="${respondsIds.contains(task.getId())} ? 'Вы уже откликнулись':'Откликнуться'"
+                                            type="submit" id="respond"></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-
     </div>
 </main>
 <footer th:replace="blocks/footer :: footer"></footer>
