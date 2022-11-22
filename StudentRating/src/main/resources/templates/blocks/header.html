@@ -33,7 +33,7 @@
                         e.preventDefault();
                         $.ajax({
                             type: 'delete',
-                            url: '/api/deleteNotification',
+                            url: '/studentsRest/deleteNotification',
                             data: $('#formNotification').serialize()
                             ,
                             success: function (data) {
@@ -92,7 +92,7 @@
                         e.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '/api/signOut',
+                            url: '/studentsRest/signOut',
                             data: $('#formSignOut').serialize()
                             ,
                             success: function (data) {
