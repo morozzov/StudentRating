@@ -58,13 +58,12 @@ public class TasksRestController {
             Respond respond = respondRepository.findById(respondId).get();
             if (respond.getExecutor().getId().equals(getSessionId(session))) {
                 if (respond.getStatus().equals("BUSY")) {
-                    System.out.println(respondId);
-//                    respond.setStatus("CANCELED");
-//                    respond.setCompletedAt(LocalDateTime.now());
-//                    respondRepository.save(respond);
-//                    Task task = taskRepository.findById(respond.getTask().getId()).get();
-//                    task.setStudentCount(task.getStudentCount() + 1);
-//                    taskRepository.save(task);
+                    respond.setStatus("CANCELED");
+                    respond.setCompletedAt(LocalDateTime.now());
+                    respondRepository.save(respond);
+                    Task task = taskRepository.findById(respond.getTask().getId()).get();
+                    task.setStudentCount(task.getStudentCount() + 1);
+                    taskRepository.save(task);
                     return "success";
                 } else {
                     return "Не существует выбранного активного отклика";
@@ -74,7 +73,7 @@ public class TasksRestController {
             }
 
         } catch (Exception e) {
-            return "e.getMessage()";
+            return e.getMessage();
         }
     }
 
