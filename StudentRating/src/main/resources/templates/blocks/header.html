@@ -31,14 +31,15 @@
                 $(function () {
                     $(document).on('submit', '#formNotification', function (e) {
                         e.preventDefault();
+                        var $form = $(this);
                         $.ajax({
                             type: 'delete',
                             url: '/studentsRest/deleteNotification',
-                            data: $('#formNotification').serialize()
+                            data: $form.serialize()
                             ,
                             success: function (data) {
                                 if (data == 'success') {
-                                    $('#formNotification').parent('div').remove();
+                                    $form.parent('div').remove();
                                     document.getElementById("count").innerHTML = document.getElementById("count").textContent - 1
                                     $('#notifications').addClass('show')
                                 } else {
