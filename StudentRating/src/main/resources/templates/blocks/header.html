@@ -40,8 +40,8 @@
                             success: function (data) {
                                 if (data == 'success') {
                                     $form.parent('div').remove();
+                                    $("#notificationsButton").dropdown('toggle')
                                     document.getElementById("count").innerHTML = document.getElementById("count").textContent - 1
-                                    $('#notifications').addClass('show')
                                 } else {
                                     alert("data")
                                 }
@@ -54,7 +54,7 @@
             <div class="dropdown text-end">
                 <button type="button" class="btn btn-sm btn-outline-light position-relative me-4 dropdown-toggle"
                         data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                        aria-expanded="false" id="notificationsButton">
                     Уведомления
                     <span th:text="${notifications.size()}" id="count"
                           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -66,7 +66,7 @@
                 <div class="dropdown-menu dropdown-menu-dark text-end" id="notifications"
                      style="">
                     <div th:each="notification : ${notifications}" th:id="${notification.getId()}"
-                         class=" dropdown-item">
+                         class="dropdown-item">
                         <form method="delete" id="formNotification">
                             <input th:value="${notification.getId()}" type="hidden" id="notificationId"
                                    name="notificationId"/>

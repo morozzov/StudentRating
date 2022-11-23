@@ -1,13 +1,7 @@
 package com.example.studentrating.controllers;
 
-import com.example.studentrating.models.Activity;
-import com.example.studentrating.models.Notification;
-import com.example.studentrating.models.PastYearPoint;
-import com.example.studentrating.models.Student;
-import com.example.studentrating.repositories.ActivityRepository;
-import com.example.studentrating.repositories.NotificationRepository;
-import com.example.studentrating.repositories.PastYearPointRepository;
-import com.example.studentrating.repositories.StudentRepository;
+import com.example.studentrating.models.*;
+import com.example.studentrating.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -29,6 +23,9 @@ public class StudentsController {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private RespondRepository respondRepository;
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -58,6 +55,7 @@ public class StudentsController {
             model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Рейтинг");
             model.addAttribute("students", students);
+
             return "rating";
         } else return "redirect:/pages/signIn";
     }
@@ -66,6 +64,7 @@ public class StudentsController {
     public String getById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentRepository.findById(getSessionId(session)).get();
+            student.setPoints(calculatePoints(student));
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
             ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
             ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
@@ -103,6 +102,18 @@ public class StudentsController {
     public void signOut(HttpSession request) {
         request.setAttribute("id", null);
         request.setAttribute("type", null);
+    }
+
+    public int calculatePoints(Student student) {
+        int points = 0;
+        ArrayList<Respond> responds = respondRepository.findByExecutor_IdAndStatusIsNot(student.getId(), "BUSY");
+
+        for (Respond resp : responds) {
+            if (resp.getStatus().equals("CANCELED")) points -= resp.getTask().getCost();
+            else if (resp.getStatus().equals("DONE")) points += resp.getTask().getCost();
+        }
+
+        return points;
     }
 
     public Long getSessionId(HttpSession request) {

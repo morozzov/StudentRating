@@ -1,7 +1,10 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
+import com.example.studentrating.models.Student;
 import com.example.studentrating.models.Task;
+import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.RespondRepository;
 import com.example.studentrating.repositories.StudentRepository;
 import com.example.studentrating.repositories.TaskRepository;
@@ -25,6 +28,9 @@ public class TasksRestController {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @PostMapping("/makeRespondByUserAndTask")
     public String makeRespondByUserAndTask(Long taskId, HttpSession session) {
@@ -64,6 +70,14 @@ public class TasksRestController {
                     Task task = taskRepository.findById(respond.getTask().getId()).get();
                     task.setStudentCount(task.getStudentCount() + 1);
                     taskRepository.save(task);
+                    Student student = studentRepository.findById(respond.getExecutor().getId()).get();
+                    student.setPoints(student.getPoints() - 1);
+                    studentRepository.save(student);
+                    Notification notification = new Notification();
+                    notification.setCost(-1);
+                    notification.setTitle(task.getTitle() + " - ОТКАЗ");
+                    notification.setStudent(student);
+                    notificationRepository.save(notification);
                     return "success";
                 } else {
                     return "Не существует выбранного активного отклика";
