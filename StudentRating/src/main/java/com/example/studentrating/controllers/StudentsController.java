@@ -37,10 +37,12 @@ public class StudentsController {
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
             ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
             ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            ArrayList<Respond> responds = respondRepository.findByExecutor_IdAndStatusIsNot(Sort.by(Sort.Direction.DESC, "completedAt"), student.getId(), "BUSY");
             model.addAttribute("notifications", notifications);
             model.addAttribute("title", id.equals(getSessionId(session)) ? "Мой профиль" : "Профиль");
             model.addAttribute("buttonsHidden", !id.equals(getSessionId(session)));
             model.addAttribute("activities", activities);
+            model.addAttribute("responds", responds);
             model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);
             return "profile";
@@ -64,13 +66,14 @@ public class StudentsController {
     public String getById(Model model, HttpSession session) {
         if (isAuthorize(session)) {
             Student student = studentRepository.findById(getSessionId(session)).get();
-            student.setPoints(calculatePoints(student));
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
             ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
             ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
+            ArrayList<Respond> responds = respondRepository.findByExecutor_IdAndStatusIsNot(Sort.by(Sort.Direction.DESC, "completedAt"), student.getId(), "BUSY");
             model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Мой профиль");
             model.addAttribute("activities", activities);
+            model.addAttribute("responds", responds);
             model.addAttribute("pastYearPoints", pastYearPoints);
             model.addAttribute("student", student);
             return "profile";
@@ -102,18 +105,6 @@ public class StudentsController {
     public void signOut(HttpSession request) {
         request.setAttribute("id", null);
         request.setAttribute("type", null);
-    }
-
-    public int calculatePoints(Student student) {
-        int points = 0;
-        ArrayList<Respond> responds = respondRepository.findByExecutor_IdAndStatusIsNot(student.getId(), "BUSY");
-
-        for (Respond resp : responds) {
-            if (resp.getStatus().equals("CANCELED")) points -= resp.getTask().getCost();
-            else if (resp.getStatus().equals("DONE")) points += resp.getTask().getCost();
-        }
-
-        return points;
     }
 
     public Long getSessionId(HttpSession request) {

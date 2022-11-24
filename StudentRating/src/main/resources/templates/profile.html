@@ -33,27 +33,59 @@
 
         </div>
 
-        <h2>Активность</h2>
-        <hr>
+        <div class="row">
+            <div class="col">
+                <h2>Активность</h2>
+                <hr>
 
-        <div th:each="activity : ${activities}" class="container">
-            <div class="card bg-light mb-3">
-                <div class="card-body">
-                    <div class="col">
-                        <div class="row justify-content-center align-items-center align-items-center">
-                            <p th:text="${activity.getCreatedAt().toLocalDate()} + ' ' + ${activity.getCreatedAt().toLocalTime()}" class="col text-start"></p>
-                            <p th:text="${activity.getTitle()}" class="col text-center"></p>
-                            <p th:text="${activity.getCost()}" class="col text-end"></p>
-                        </div>
-                        <div class="d-grid">
-                            <button th:hidden="${buttonsHidden}" class="btn btn-outline-danger" type="button">Оспорить</button>
+                <div th:each="activity : ${activities}" class="container">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <div class="col">
+                                <div class="row justify-content-center align-items-center align-items-center">
+                                    <p th:text="${activity.getCreatedAt().toLocalDate()} + ' ' + ${activity.getCreatedAt().toLocalTime()}"
+                                       class="col text-start"></p>
+                                    <p th:text="${activity.getTitle()}" class="col text-center"></p>
+                                    <p th:text="${activity.getCost()}" class="col text-end"></p>
+                                </div>
+                                <div class="d-grid">
+                                    <button th:hidden="${buttonsHidden}" class="btn btn-outline-danger" type="button">
+                                        Оспорить
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
+            <div class="col">
+                <h2>Поручения</h2>
+                <hr>
 
+                <div th:each="respond : ${responds}" class="container">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body">
+                            <div class="col">
+                                <div class="row justify-content-center align-items-center align-items-center">
+                                    <p th:text="${respond.getCompletedAt().toLocalDate()} + ' ' + ${respond.getCompletedAt().toLocalTime()}"
+                                       class="col text-start"></p>
+                                    <p th:text="${respond.getStatus().equals('COMPLETED')} ? ${respond.getTask().getTitle()} : ${respond.getTask().getTitle()} + ' (ОТКАЗ)'" class="col text-center"></p>
+                                    <p th:text="${respond.getStatus().equals('COMPLETED')} ? ${respond.getTask().getCost()} : '-1'"
+                                       class="col text-end"></p>
+                                </div>
+                                <div class="d-grid">
+                                    <button th:hidden="${buttonsHidden}" class="btn btn-outline-danger"
+                                            type="button">
+                                        Оспорить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 <footer th:replace="blocks/footer :: footer"></footer>
