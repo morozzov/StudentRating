@@ -8,5 +8,5 @@ import java.util.ArrayList;
 
 public interface TaskRepository extends CrudRepository<Task, Long> {
 
-    ArrayList<Task> findAllByStudentCountIsNot(Sort deadLin, int count);
+    ArrayList<Task> findAllByStudentCountIsNotAndActive(Sort deadLin, int count, boolean active);
 }

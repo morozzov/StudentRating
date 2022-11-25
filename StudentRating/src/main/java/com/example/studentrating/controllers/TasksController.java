@@ -32,7 +32,7 @@ public class TasksController {
     @GetMapping("/getAll")
     public String getAll(Model model, HttpSession session) {
         if (isAuthorize(session)) {
-            ArrayList<Task> tasks = taskRepository.findAllByStudentCountIsNot(Sort.by(Sort.Direction.ASC, "deadLine"), 0);
+            ArrayList<Task> tasks = taskRepository.findAllByStudentCountIsNotAndActive(Sort.by(Sort.Direction.ASC, "deadLine"), 0, true);
             ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(getSessionId(session), "BUSY");
             ArrayList<Long> respondsIds = new ArrayList<>();
             for (Respond r : responds) {

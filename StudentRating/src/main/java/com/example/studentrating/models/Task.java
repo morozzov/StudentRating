@@ -32,6 +32,8 @@ public class Task {
 
     protected LocalDateTime createdAt;
 
+    protected boolean active;
+
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
