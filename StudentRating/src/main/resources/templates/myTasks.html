@@ -15,7 +15,7 @@
                     var $form = $(this);
                     $.ajax({
                         type: 'post',
-                        url: '/tasksRest/cancelRespondByUserAndRespond',
+                        url: '/respondsRest/cancelRespondByUserAndRespond',
                         data: $form.serialize()
                         ,
                         success: function (data) {

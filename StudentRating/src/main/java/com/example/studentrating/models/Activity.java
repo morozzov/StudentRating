@@ -31,6 +31,8 @@ public class Activity {
 
     protected LocalDateTime createdAt;
 
+    private boolean isDisputed;
+
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();

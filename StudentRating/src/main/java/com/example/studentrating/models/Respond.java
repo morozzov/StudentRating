@@ -31,6 +31,8 @@ public class Respond {
 
     protected LocalDateTime completedAt;
 
+    private boolean isDisputed;
+
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
