@@ -27,6 +27,8 @@ public class User {
 
     private String password;
 
+    private String role;
+
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
 

@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
 import com.example.studentrating.models.Student;
@@ -35,12 +36,12 @@ public class RespondRestController {
     @PostMapping("/makeRespondByUserAndTask")
     public String makeRespondByUserAndTask(Long taskId, HttpSession session) {
         try {
-            if (respondRepository.findByTask_IdAndExecutor_IdAndStatus(taskId, getSessionId(session), "BUSY").size() == 0) {
+            if (respondRepository.findByTask_IdAndExecutor_IdAndStatus(taskId, Session.getSessionId(session), "BUSY").size() == 0) {
                 Task task = taskRepository.findById(taskId).get();
                 if (task.getStudentCount() > 0) {
                     Respond respond = new Respond();
                     respond.setStatus("BUSY");
-                    respond.setExecutor(studentRepository.findById(getSessionId(session)).get());
+                    respond.setExecutor(studentRepository.findById(Session.getSessionId(session)).get());
                     respond.setTask(task);
                     respondRepository.save(respond);
                     task.setStudentCount(task.getStudentCount() - 1);
@@ -62,7 +63,7 @@ public class RespondRestController {
     public String cancelRespondByUserAndRespond(Long respondId, HttpSession session) {
         try {
             Respond respond = respondRepository.findById(respondId).get();
-            if (respond.getExecutor().getId().equals(getSessionId(session))) {
+            if (respond.getExecutor().getId().equals(Session.getSessionId(session))) {
                 if (respond.getStatus().equals("BUSY")) {
                     respond.setStatus("CANCELED");
                     respond.setCompletedAt(LocalDateTime.now());
@@ -95,7 +96,7 @@ public class RespondRestController {
     public String disputeRespond(Long respondId, HttpSession session) {
         try {
             Respond respond = respondRepository.findById(respondId).get();
-            if (respond.getExecutor().getId().equals(getSessionId(session))) {
+            if (respond.getExecutor().getId().equals(Session.getSessionId(session))) {
                 if (!respond.isDisputed()) {
                     respond.setDisputed(true);
                     respondRepository.save(respond);
@@ -117,9 +118,5 @@ public class RespondRestController {
         } catch (Exception e) {
             return "e.getMessage()";
         }
-    }
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
     }
 }

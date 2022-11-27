@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Activity;
 import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
@@ -26,7 +27,7 @@ public class ActivitiesRestController {
     public String disputeActivity(Long activityId, HttpSession session) {
         try {
             Activity activity = activityRepository.findById(activityId).get();
-            if (activity.getStudent().getId().equals(getSessionId(session))) {
+            if (activity.getStudent().getId().equals(Session.getSessionId(session))) {
                 if (!activity.isDisputed()) {
                     activity.setDisputed(true);
                     activityRepository.save(activity);
@@ -48,9 +49,5 @@ public class ActivitiesRestController {
         } catch (Exception e) {
             return "e.getMessage()";
         }
-    }
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
     }
 }

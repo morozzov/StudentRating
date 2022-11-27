@@ -32,8 +32,4 @@ public class TasksRestController {
     @Autowired
     private NotificationRepository notificationRepository;
 
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
-    }
 }

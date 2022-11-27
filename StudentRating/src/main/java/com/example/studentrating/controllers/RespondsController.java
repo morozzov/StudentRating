@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
 import com.example.studentrating.repositories.NotificationRepository;
@@ -26,22 +27,13 @@ public class RespondsController {
 
     @GetMapping("/getByUser")
     public String getByUser(Model model, HttpSession session) {
-        if (isAuthorize(session)) {
-            ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(getSessionId(session), "BUSY");
-            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+            ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(Session.getSessionId(session), "BUSY");
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
             model.addAttribute("notifications", notifications);
             model.addAttribute("responds", responds);
             model.addAttribute("title", "Мои поручения");
             return "myTasks";
         } else return "redirect:/pages/signIn";
-    }
-
-    public boolean isAuthorize(HttpSession request) {
-        if (request.getAttribute("id") != null && request.getAttribute("type") != null) return true;
-        else return false;
-    }
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
     }
 }

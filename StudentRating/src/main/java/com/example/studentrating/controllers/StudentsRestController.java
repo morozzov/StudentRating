@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Student;
 import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.StudentRepository;
@@ -28,7 +29,7 @@ public class StudentsRestController {
     public String signIn(String login, String password, HttpSession session) {
         Student student = studentRepository.findByLoginAndPassword(login, encryptText(password));
         if (student != null) {
-            setSession(session, student.getId(), "STUDENT");
+            Session.setSession(session, student.getId(), student.getRole());
             return "success";
         } else {
             return "error";
@@ -38,8 +39,7 @@ public class StudentsRestController {
     @PostMapping("/signOut")
     public String signOut(HttpSession request) {
         try {
-            request.setAttribute("id", null);
-            request.setAttribute("type", null);
+            Session.signOut(request);
             return "success";
         } catch (Exception e) {
             return "e.getMessage()";
@@ -51,7 +51,7 @@ public class StudentsRestController {
         try {
             // image - null, password1 = ""
             if (login != "" || password1 != "") {
-                Student student = studentRepository.findById(getSessionId(session)).get();
+                Student student = studentRepository.findById(Session.getSessionId(session)).get();
                 if (login != "") student.setLogin(login);
                 if (password1 != "") student.setPassword(encryptText(password1));
                 studentRepository.save(student);
@@ -70,15 +70,6 @@ public class StudentsRestController {
         } catch (Exception e) {
             return "e.getMessage()";
         }
-    }
-
-    private void setSession(HttpSession request, Long id, String type) {
-        request.setAttribute("id", id);
-        request.setAttribute("type", type);
-    }
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
     }
 
     private static String encryptText(String input) {

@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Notification;
 import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.StudentRepository;
@@ -25,8 +26,8 @@ public class PagesController {
 
     @GetMapping("/about")
     public String about(Model model, HttpSession session) {
-        if (isAuthorize(session)) {
-            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
             model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Справка");
             return "about";
@@ -37,20 +38,5 @@ public class PagesController {
     public String signIn(Model model) {
         model.addAttribute("title", "Авторизация");
         return "signIn";
-    }
-
-
-    public void setSession(HttpSession request, Long id, String type) {
-        request.setAttribute("id", id);
-        request.setAttribute("type", type);
-    }
-
-    public boolean isAuthorize(HttpSession request) {
-        if (request.getAttribute("id") != null && request.getAttribute("type") != null) return true;
-        else return false;
-    }
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
     }
 }

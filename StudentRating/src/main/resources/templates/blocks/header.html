@@ -20,6 +20,11 @@
                 <li><a href="/pages/about" class="nav-link px-2"
                        th:classappend="${#httpServletRequest.getRequestURI() == '/pages/about' ? 'text-secondary':'text-white'}">Справка</a>
                 </li>
+                <li th:if="${session.type.equals('ADMIN')}">
+                    <a href="/pages/admin" class="nav-link px-2"
+                       th:classappend="${#httpServletRequest.getRequestURI() == '/pages/admin' ? 'text-secondary':'text-white'}">
+                        Панель администратора</a>
+                </li>
             </ul>
 
             <!--            <div class="text-end">-->

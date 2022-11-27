@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
 import com.example.studentrating.models.Task;
@@ -31,29 +32,19 @@ public class TasksController {
 
     @GetMapping("/getAll")
     public String getAll(Model model, HttpSession session) {
-        if (isAuthorize(session)) {
+        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
             ArrayList<Task> tasks = taskRepository.findAllByStudentCountIsNotAndActive(Sort.by(Sort.Direction.ASC, "deadLine"), 0, true);
-            ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(getSessionId(session), "BUSY");
+            ArrayList<Respond> responds = respondRepository.findAllByExecutor_IdAndStatus(Session.getSessionId(session), "BUSY");
             ArrayList<Long> respondsIds = new ArrayList<>();
             for (Respond r : responds) {
-                if (r.getExecutor().getId() == getSessionId(session)) respondsIds.add(r.getTask().getId());
+                if (r.getExecutor().getId() == Session.getSessionId(session)) respondsIds.add(r.getTask().getId());
             }
-            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), getSessionId(session));
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
             model.addAttribute("notifications", notifications);
             model.addAttribute("tasks", tasks);
             model.addAttribute("respondsIds", respondsIds);
             model.addAttribute("title", "Поручения");
             return "tasks";
         } else return "redirect:/pages/signIn";
-    }
-
-
-    public boolean isAuthorize(HttpSession request) {
-        if (request.getAttribute("id") != null && request.getAttribute("type") != null) return true;
-        else return false;
-    }
-
-    public Long getSessionId(HttpSession request) {
-        return (Long) request.getAttribute("id");
     }
 }
