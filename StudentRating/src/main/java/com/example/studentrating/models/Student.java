@@ -17,4 +17,6 @@ public class Student extends User {
     private String groupName;
 
     private int points;
+
+    private boolean isStudentCouncil;
 }

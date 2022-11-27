@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <div class="row">
+            <div class="container col-7">
+                <h2>Студенты</h2>
+                <hr>
+                <div th:each="student : ${students}" class="card bg-light mb-3">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center">
+                        <div class="col m-1 justify-content-center">
+                            <img th:src="${student.imageUrl}" alt="mdo" width="40"
+                                 height="40"
+                                 class="rounded-circle d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                        </div>
+                        <div class="col justify-content-center">
+                            <p th:text="${student.login}"
+                               class="card-text text-center"></p>
+                        </div>
+                        <div class="col">
+                            <div class="col justify-content-center">
+                                <p th:text="${student.surname}"
+                                   class="card-text text-center"></p>
+                            </div>
+                            <div class="col justify-content-center">
+                                <p th:text="${student.name}"
+                                   class="card-text text-center"></p>
+                            </div>
+                            <div class="col justify-content-center">
+                                <p th:text="${student.patronymic}"
+                                   class="card-text text-center"></p>
+                            </div>
+                        </div>
+                        <div class="col justify-content-center">
+                            <p th:text="${student.groupName}" class="card-text text-center"></p>
+                        </div>
+                        <div class="col p-2 justify-content-center">
+                            <p th:text="${student.points}" class="card-text text-center"></p>
+                        </div>
+                        <div class="col p-2 justify-content-center">
+                            <p th:text="${student.isStudentCouncil()==true?'Cтудсовет':''}"
+                               class="card-text text-center"></p>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-sm btn-outline-danger mb-1">Удалить</button>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-sm btn-outline-info">Изменить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3 p-1 border-success">
+                    <form action="">
+                        <div class="d-flex flex-column  justify-content-center px-3">
+                            <div class="col-auto">
+                                <div class="row mb-1">
+                                    <input name="surname" type="text" class="form-control form-control-sm col me-1"
+                                           placeholder="Фамилия">
+                                    <input name="name" type="text" class="form-control form-control-sm col me-1"
+                                           placeholder="Имя">
+                                    <input name="patronymic" type="text" class="form-control form-control-sm col"
+                                           placeholder="Отчество">
+                                </div>
+                                <div class="row mb-1">
+                                    <input name="login" type="text" class="form-control form-control-sm col me-1"
+                                           placeholder="Логин">
+                                    <input name="login" type="text" class="form-control form-control-sm col"
+                                           placeholder="Группа">
+                                    <div class="col">
+                                        <input class="form-check-input" type="checkbox" name="isStudentCouncil" value=""
+                                               id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Состоит в студсовете
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Добавить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="container col">
+                <h2>Преподаватели</h2>
+                <hr>
+                <div th:each="teacher : ${teachers}" class="card bg-light mb-3">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center">
+                        <div class="col-1 m-1 justify-content-center">
+                            <img th:src="${teacher.imageUrl}" alt="mdo" width="40"
+                                 height="40"
+                                 class="rounded-circle d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                        </div>
+                        <div class="col justify-content-center">
+                            <p th:text="${teacher.login}"
+                               class="card-text text-center"></p>
+                        </div>
+                        <div class="col">
+                            <div class="col justify-content-center">
+                                <p th:text="${teacher.surname}"
+                                   class="card-text text-center"></p>
+                            </div>
+                            <div class="col justify-content-center">
+                                <p th:text="${teacher.name}"
+                                   class="card-text text-center"></p>
+                            </div>
+                            <div class="col justify-content-center">
+                                <p th:text="${teacher.patronymic}"
+                                   class="card-text text-center"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3 p-1 border-success">
+                    <form action="">
+                        <div class="d-flex flex-column  justify-content-center px-3">
+                            <div class="col-auto">
+                                <div class="row mb-1">
+                                    <input name="surname" type="text" class="form-control form-control-sm col me-1"
+                                           placeholder="Фамилия">
+                                    <input name="name" type="text" class="form-control form-control-sm col me-1"
+                                           placeholder="Имя">
+
+                                </div>
+                                <div class="row mb-1">
+                                    <input name="patronymic" type="text" class="form-control form-control-sm col"
+                                           placeholder="Отчество">
+                                    <input name="login" type="text" class="form-control form-control-sm col me-1"
+                                           placeholder="Логин">
+                                </div>
+                                <div class="row">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Добавить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>
