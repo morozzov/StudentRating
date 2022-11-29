@@ -47,14 +47,16 @@ public class PagesController {
     }
 
     @GetMapping("/admin")
-    public String admin(Model model , HttpSession session) {
-        ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
-        ArrayList<Teacher> teachers = teacherRepository.findAll();
-        ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("students", students);
-        model.addAttribute("teachers", teachers);
-        model.addAttribute("title", "Панель администратора");
-        return "admin";
+    public String admin(Model model, HttpSession session) {
+        if (Session.isAuthorize(session).equals("ADMIN")) {
+            ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+            ArrayList<Teacher> teachers = teacherRepository.findAll();
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
+            model.addAttribute("notifications", notifications);
+            model.addAttribute("students", students);
+            model.addAttribute("teachers", teachers);
+            model.addAttribute("title", "Панель администратора");
+            return "admin";
+        } else return "redirect:/pages/signIn";
     }
 }
