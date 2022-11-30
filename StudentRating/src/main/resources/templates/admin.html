@@ -121,6 +121,33 @@
                     </form>
                 </div>
             </div>
+
+            <script>
+                $(function () {
+                    $(document).on('submit', '#formNewTeacher', function (e) {
+                        e.preventDefault();
+                        if ($('#teacherSurname').val() && $('#teacherName').val() && $('#teacherPatronymic').val() && $('#teacherLogin').val()) {
+
+                            $.ajax({
+                                type: 'post',
+                                url: '/teachersRest/addNew',
+                                data: $('#formNewTeacher').serialize()
+                                ,
+                                success: function (data) {
+                                    if (data == "success") {
+                                        window.location = '/pages/admin'
+                                    } else {
+                                        alert(data)
+                                    }
+                                }
+                            });
+                        } else {
+                            alert("Заполните все поля")
+                        }
+                    });
+                })
+                ;
+            </script>
             <div class="container col">
                 <h2>Преподаватели</h2>
                 <hr>
@@ -158,20 +185,20 @@
                     </div>
                 </div>
                 <div class="card bg-light mb-3 p-1 border-success">
-                    <form action="">
+                    <form id="formNewTeacher" action="">
                         <div class="d-flex flex-column  justify-content-center px-3">
                             <div class="col-auto">
                                 <div class="row mb-1">
-                                    <input name="surname" type="text" class="form-control form-control-sm col me-1"
+                                    <input name="surname" id="teacherSurname" type="text" class="form-control form-control-sm col me-1"
                                            placeholder="Фамилия">
-                                    <input name="name" type="text" class="form-control form-control-sm col me-1"
+                                    <input name="name" id="teacherName" type="text" class="form-control form-control-sm col me-1"
                                            placeholder="Имя">
 
                                 </div>
                                 <div class="row mb-1">
-                                    <input name="patronymic" type="text" class="form-control form-control-sm col"
+                                    <input name="patronymic" id="teacherPatronymic" type="text" class="form-control form-control-sm col"
                                            placeholder="Отчество">
-                                    <input name="login" type="text" class="form-control form-control-sm col me-1"
+                                    <input name="login" id="teacherLogin" type="text" class="form-control form-control-sm col me-1"
                                            placeholder="Логин">
                                 </div>
                                 <div class="row">
