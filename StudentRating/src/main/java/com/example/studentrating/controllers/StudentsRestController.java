@@ -1,10 +1,8 @@
 package com.example.studentrating.controllers;
 
 import com.example.studentrating.lib.Session;
-import com.example.studentrating.models.Student;
-import com.example.studentrating.repositories.NotificationRepository;
-import com.example.studentrating.repositories.StudentRepository;
-import com.example.studentrating.repositories.TeacherRepository;
+import com.example.studentrating.models.*;
+import com.example.studentrating.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import static com.example.studentrating.lib.Encrypt.encryptText;
 
@@ -26,7 +25,16 @@ public class StudentsRestController {
     private TeacherRepository teacherRepository;
 
     @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private RespondRepository respondRepository;
+
+    @Autowired
+    private PastYearPointRepository pastYearPointRepository;
 
     @PostMapping("/signIn")
     public String signIn(String login, String password, HttpSession session) {
@@ -92,8 +100,33 @@ public class StudentsRestController {
             }
             return "success";
         } catch (Exception e) {
-            return "e.getMessage()";
+            return e.getMessage();
         }
+    }
+
+    @PostMapping("/deleteById")
+    public String deleteById(Long studentId, HttpSession session) {
+        try {
+            ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(studentId);
+            pastYearPointRepository.deleteAll(pastYearPoints);
+
+            ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(studentId);
+            activityRepository.deleteAll(activities);
+
+            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(studentId);
+            notificationRepository.deleteAll(notifications);
+
+            ArrayList<Respond> responds = respondRepository.findAllByExecutor_Id(studentId);
+            respondRepository.deleteAll(responds);
+
+            studentRepository.deleteById(studentId);
+            return "success";
+
+        } catch (
+                Exception e) {
+            return e.getMessage();
+        }
+
     }
 
     @DeleteMapping("/deleteNotification")

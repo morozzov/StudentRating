@@ -9,4 +9,6 @@ import java.util.ArrayList;
 public interface NotificationRepository extends CrudRepository<Notification, Long> {
 
     ArrayList<Notification> findAllByStudent_Id(Sort createdAt, Long studentId);
+
+    ArrayList<Notification> findAllByStudent_Id(Long studentId);
 }

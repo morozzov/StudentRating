@@ -33,12 +33,67 @@
                 });
             })
             ;
+            $(function () {
+                $(document).on('submit', '#formStudentDelete', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'post',
+                        url: '/studentsRest/deleteById',
+                        data: $(this).serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                window.location = '/pages/admin'
+                            } else {
+                                alert(data)
+                            }
+                        }
+                    });
+                });
+            })
+            ;
         </script>
         <div class="row">
             <div class="container col-7">
                 <h2>Студенты</h2>
                 <hr>
                 <div id="students">
+                    <div class="card bg-light mb-3 p-1 border-success">
+                        <form id="formNewStudent" action="">
+                            <div class="d-flex flex-column  justify-content-center px-3">
+                                <div class="col-auto">
+                                    <div class="row mb-1">
+                                        <input name="surname" id="surname" type="text"
+                                               class="form-control form-control-sm col me-1"
+                                               placeholder="Фамилия">
+                                        <input name="name" id="name" type="text"
+                                               class="form-control form-control-sm col me-1"
+                                               placeholder="Имя">
+                                        <input name="patronymic" id="patronymic" type="text"
+                                               class="form-control form-control-sm col"
+                                               placeholder="Отчество">
+                                    </div>
+                                    <div class="row mb-1">
+                                        <input name="login" id="login" type="text"
+                                               class="form-control form-control-sm col me-1"
+                                               placeholder="Логин">
+                                        <input name="group" id="group" type="text" class="form-control form-control-sm col"
+                                               placeholder="Группа">
+                                        <div class="col">
+                                            <input class="form-check-input" type="checkbox" name="isStudentCouncil"
+                                                   id="isStudentCouncil">
+                                            <label class="form-check-label" for="isStudentCouncil">
+                                                Состоит в студсовете
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button type="submit" class="btn btn-sm btn-outline-success">Добавить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div th:each="student : ${students}" class="card bg-light mb-3">
                         <div class="d-flex flex-wrap align-items-center justify-content-center">
                             <div class="col m-1 justify-content-center">
@@ -75,50 +130,14 @@
                                    class="card-text text-center"></p>
                             </div>
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-sm btn-outline-danger me-2">Удалить</button>
-                            </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-sm btn-outline-info me-2">Изменить</button>
+                                <form id="formStudentDelete" action="">
+                                    <input th:value="${student.getId()}" type="hidden" id="studentId"
+                                           name="studentId"/>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger me-2">Удалить</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="card bg-light mb-3 p-1 border-success">
-                    <form id="formNewStudent" action="">
-                        <div class="d-flex flex-column  justify-content-center px-3">
-                            <div class="col-auto">
-                                <div class="row mb-1">
-                                    <input name="surname" id="surname" type="text"
-                                           class="form-control form-control-sm col me-1"
-                                           placeholder="Фамилия">
-                                    <input name="name" id="name" type="text"
-                                           class="form-control form-control-sm col me-1"
-                                           placeholder="Имя">
-                                    <input name="patronymic" id="patronymic" type="text"
-                                           class="form-control form-control-sm col"
-                                           placeholder="Отчество">
-                                </div>
-                                <div class="row mb-1">
-                                    <input name="login" id="login" type="text"
-                                           class="form-control form-control-sm col me-1"
-                                           placeholder="Логин">
-                                    <input name="group" id="group" type="text" class="form-control form-control-sm col"
-                                           placeholder="Группа">
-                                    <div class="col">
-                                        <input class="form-check-input" type="checkbox" name="isStudentCouncil"
-                                               id="isStudentCouncil">
-                                        <label class="form-check-label" for="isStudentCouncil">
-                                            Состоит в студсовете
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <button type="submit" class="btn btn-sm btn-outline-success">Добавить</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
 
@@ -151,6 +170,34 @@
             <div class="container col">
                 <h2>Преподаватели</h2>
                 <hr>
+                <div class="card bg-light mb-3 p-1 border-success">
+                    <form id="formNewTeacher" action="">
+                        <div class="d-flex flex-column  justify-content-center px-3">
+                            <div class="col-auto">
+                                <div class="row mb-1">
+                                    <input name="surname" id="teacherSurname" type="text"
+                                           class="form-control form-control-sm col me-1"
+                                           placeholder="Фамилия">
+                                    <input name="name" id="teacherName" type="text"
+                                           class="form-control form-control-sm col me-1"
+                                           placeholder="Имя">
+
+                                </div>
+                                <div class="row mb-1">
+                                    <input name="patronymic" id="teacherPatronymic" type="text"
+                                           class="form-control form-control-sm col"
+                                           placeholder="Отчество">
+                                    <input name="login" id="teacherLogin" type="text"
+                                           class="form-control form-control-sm col me-1"
+                                           placeholder="Логин">
+                                </div>
+                                <div class="row">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Добавить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div th:each="teacher : ${teachers}" class="card bg-light mb-3">
                     <div class="d-flex flex-wrap align-items-center justify-content-center">
                         <div class="col-1 m-1 justify-content-center">
@@ -176,37 +223,7 @@
                                    class="card-text text-center"></p>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-sm btn-outline-danger me-2">Удалить</button>
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-sm btn-outline-info me-2">Изменить</button>
-                        </div>
                     </div>
-                </div>
-                <div class="card bg-light mb-3 p-1 border-success">
-                    <form id="formNewTeacher" action="">
-                        <div class="d-flex flex-column  justify-content-center px-3">
-                            <div class="col-auto">
-                                <div class="row mb-1">
-                                    <input name="surname" id="teacherSurname" type="text" class="form-control form-control-sm col me-1"
-                                           placeholder="Фамилия">
-                                    <input name="name" id="teacherName" type="text" class="form-control form-control-sm col me-1"
-                                           placeholder="Имя">
-
-                                </div>
-                                <div class="row mb-1">
-                                    <input name="patronymic" id="teacherPatronymic" type="text" class="form-control form-control-sm col"
-                                           placeholder="Отчество">
-                                    <input name="login" id="teacherLogin" type="text" class="form-control form-control-sm col me-1"
-                                           placeholder="Логин">
-                                </div>
-                                <div class="row">
-                                    <button type="submit" class="btn btn-sm btn-outline-success">Добавить</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
