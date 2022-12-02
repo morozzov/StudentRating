@@ -3,6 +3,8 @@ package com.example.studentrating.controllers;
 import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.*;
 import com.example.studentrating.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import static com.example.studentrating.lib.Encrypt.encryptText;
 @RestController
 @RequestMapping(path = "/usersRest")
 public class UsersRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(UsersRestController.class);
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -41,6 +45,7 @@ public class UsersRestController {
                     }
                     if (!password1.equals("")) student.setPassword(encryptText(password1));
                     studentRepository.save(student);
+                    log.info("Student with id:{} was updated", student.getId());
                 }
             } else if (Session.getSessionType(session).equals("TEACHER")) {
                 if (!login.equals("") || password1.equals("")) {
@@ -52,6 +57,7 @@ public class UsersRestController {
                     }
                     if (!password1.equals("")) teacher.setPassword(encryptText(password1));
                     teacherRepository.save(teacher);
+                    log.info("Teacher with id:{} was updated", teacher.getId());
                 }
             } else {
                 return "У вас нет прав на данное действие";
@@ -93,6 +99,7 @@ public class UsersRestController {
         try {
             if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
                 notificationRepository.deleteById(notificationId);
+                log.info("Notifications with id:{} was deleted", notificationId);
                 return "success";
             } else {
                 return "У вас нет прав на данное действие";

@@ -6,6 +6,8 @@ import com.example.studentrating.models.Notification;
 import com.example.studentrating.models.Respond;
 import com.example.studentrating.repositories.ActivityRepository;
 import com.example.studentrating.repositories.NotificationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping(path = "/activitiesRest")
 public class ActivitiesRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(ActivitiesRestController.class);
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -39,6 +43,7 @@ public class ActivitiesRestController {
 
                     //TODO: realize logic for dispute to mentors sending
 
+                    log.info("Activity with id:{} was disputed", activity.getId());
                     return "success";
                 } else {
                     return "Спор уже создан";

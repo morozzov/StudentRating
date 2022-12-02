@@ -3,6 +3,8 @@ package com.example.studentrating.controllers;
 import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.*;
 import com.example.studentrating.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ import static com.example.studentrating.lib.Encrypt.encryptText;
 @RestController
 @RequestMapping(path = "/studentsRest")
 public class StudentsRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(TeachersRestController.class);
 
     @Autowired
     private StudentRepository studentRepository;
@@ -53,6 +57,7 @@ public class StudentsRestController {
                     student.setRole("STUDENT");
                     student.setPoints(0);
                     studentRepository.save(student);
+                    log.info("Student with id:{} was created", student.getId());
                     return "success";
                 } else {
                     return "Введите другой логин";
@@ -83,6 +88,7 @@ public class StudentsRestController {
                 respondRepository.deleteAll(responds);
 
                 studentRepository.deleteById(studentId);
+                log.info("Student with id:{} was deleted", studentId);
                 return "success";
             } else {
                 return "У вас нет прав на данное действие";

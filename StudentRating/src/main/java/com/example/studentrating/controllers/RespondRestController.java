@@ -9,6 +9,8 @@ import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.RespondRepository;
 import com.example.studentrating.repositories.StudentRepository;
 import com.example.studentrating.repositories.TaskRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping(path = "/respondsRest")
 public class RespondRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(RespondRestController.class);
 
     @Autowired
     private TaskRepository taskRepository;
@@ -47,6 +51,7 @@ public class RespondRestController {
                         respondRepository.save(respond);
                         task.setStudentCount(task.getStudentCount() - 1);
                         taskRepository.save(task);
+                        log.info("Respond with id:{} was created", respond.getId());
                         return "success";
                     } else {
                         return "Закончились свободные места для выполнения поручения";
@@ -84,6 +89,7 @@ public class RespondRestController {
                         notification.setTitle(task.getTitle() + " - ОТКАЗ");
                         notification.setStudent(student);
                         notificationRepository.save(notification);
+                        log.info("Respond with id:{} was canceled", respond.getId());
                         return "success";
                     } else {
                         return "Не существует выбранного активного отклика";
@@ -116,6 +122,7 @@ public class RespondRestController {
 
                         //TODO: realize logic for dispute to mentors sending
 
+                        log.info("Respond with id:{} was disputed", respond.getId());
                         return "success";
                     } else {
                         return "Спор уже создан";

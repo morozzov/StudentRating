@@ -5,6 +5,8 @@ import com.example.studentrating.models.Student;
 import com.example.studentrating.models.Teacher;
 import com.example.studentrating.repositories.StudentRepository;
 import com.example.studentrating.repositories.TeacherRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,8 @@ import static com.example.studentrating.lib.Encrypt.encryptText;
 @RestController
 @RequestMapping(path = "/teachersRest")
 public class TeachersRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(TeachersRestController.class);
 
     @Autowired
     private StudentRepository studentRepository;
@@ -39,6 +43,7 @@ public class TeachersRestController {
                     teacher.setImageUrl("/img/avatars/personal.svg");
                     teacher.setRole("TEACHER");
                     teacherRepository.save(teacher);
+                    log.info("Teacher with id:{} was created", teacher.getId());
                     return "success";
                 } else {
                     return "Введите другой логин";
