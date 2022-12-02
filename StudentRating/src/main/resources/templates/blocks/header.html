@@ -27,11 +27,6 @@
                 </li>
             </ul>
 
-            <!--            <div class="text-end">-->
-            <!--                <button type="button" class="btn btn-outline-light me-2">Авторизация</button>-->
-            <!--                <button type="button" class="btn btn-warning">Регистрация</button>-->
-            <!--            </div>-->
-
             <script th:if="${session.type.equals('ADMIN') || session.type.equals('STUDENT')}">
                 $(function () {
                     $(document).on('submit', '#formNotification', function (e) {
