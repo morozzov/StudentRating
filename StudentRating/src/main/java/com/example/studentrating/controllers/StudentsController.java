@@ -33,7 +33,7 @@ public class StudentsController {
 
     @GetMapping("/getById/{id}")
     public String getById(@PathVariable("id") Long id, Model model, HttpSession session) {
-        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")|| Session.isAuthorize(session).equals("TEACHER")) {
             Student student = studentRepository.findById(id).get();
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
             ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
@@ -52,7 +52,7 @@ public class StudentsController {
 
     @GetMapping("/getAll")
     public String getAll(Model model, HttpSession session) {
-        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN") || Session.isAuthorize(session).equals("TEACHER")) {
             ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
             model.addAttribute("notifications", notifications);
@@ -60,36 +60,6 @@ public class StudentsController {
             model.addAttribute("students", students);
 
             return "rating";
-        } else return "redirect:/pages/signIn";
-    }
-
-    @GetMapping("/getMyProfile")
-    public String getById(Model model, HttpSession session) {
-        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
-            Student student = studentRepository.findById(Session.getSessionId(session)).get();
-            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
-            ArrayList<Activity> activities = activityRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), student.getId());
-            ArrayList<PastYearPoint> pastYearPoints = pastYearPointRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "year"), student.getId());
-            ArrayList<Respond> responds = respondRepository.findByExecutor_IdAndStatusIsNot(Sort.by(Sort.Direction.DESC, "completedAt"), student.getId(), "BUSY");
-            model.addAttribute("notifications", notifications);
-            model.addAttribute("title", "Мой профиль");
-            model.addAttribute("activities", activities);
-            model.addAttribute("responds", responds);
-            model.addAttribute("pastYearPoints", pastYearPoints);
-            model.addAttribute("student", student);
-            return "profile";
-        } else return "redirect:/pages/signIn";
-    }
-
-    @GetMapping("/getSettingsById")
-    public String getSettingsById(Model model, HttpSession session) {
-        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
-            Student student = studentRepository.findById(Session.getSessionId(session)).get();
-            ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
-            model.addAttribute("notifications", notifications);
-            model.addAttribute("student", student);
-            model.addAttribute("title", "Настройки");
-            return "settings";
         } else return "redirect:/pages/signIn";
     }
 }

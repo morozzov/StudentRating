@@ -10,7 +10,8 @@ public class Session {
     }
 
     public static String isAuthorize(HttpSession request) {
-        if (request.getAttribute("id") != null && request.getAttribute("type") != null) return request.getAttribute("type").toString();
+        if (request.getAttribute("id") != null && request.getAttribute("type") != null)
+            return request.getAttribute("type").toString();
         else return "";
     }
 
@@ -20,6 +21,11 @@ public class Session {
     }
 
     public static Long getSessionId(HttpSession request) {
+
         return (Long) request.getAttribute("id");
+    }
+
+    public static String getSessionType(HttpSession request) {
+        return (String) request.getAttribute("type");
     }
 }

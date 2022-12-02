@@ -10,10 +10,10 @@
                 <li><a href="/students/getAll" class="nav-link px-2"
                        th:classappend="${#httpServletRequest.getRequestURI() == '/students/getAll' ? 'text-secondary':'text-white'}">Рейтинг</a>
                 </li>
-                <li><a href="/tasks/getAll" class="nav-link px-2"
+                <li th:if="${session.type.equals('ADMIN') || session.type.equals('STUDENT')}"><a href="/tasks/getAll" class="nav-link px-2"
                        th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getAll' ? 'text-secondary':'text-white'}">Поручения</a>
                 </li>
-                <li><a href="/responds/getByUser" class="nav-link px-2"
+                <li th:if="${session.type.equals('ADMIN') || session.type.equals('STUDENT')}"><a href="/responds/getByUser" class="nav-link px-2"
                        th:classappend="${#httpServletRequest.getRequestURI() == '/responds/getByUser' ? 'text-secondary':'text-white'}">Мои
                     поручения</a>
                 </li>
@@ -32,14 +32,14 @@
             <!--                <button type="button" class="btn btn-warning">Регистрация</button>-->
             <!--            </div>-->
 
-            <script>
+            <script th:if="${session.type.equals('ADMIN') || session.type.equals('STUDENT')}">
                 $(function () {
                     $(document).on('submit', '#formNotification', function (e) {
                         e.preventDefault();
                         var $form = $(this);
                         $.ajax({
                             type: 'delete',
-                            url: '/studentsRest/deleteNotification',
+                            url: '/usersRest/deleteNotification',
                             data: $form.serialize()
                             ,
                             success: function (data) {
@@ -56,7 +56,7 @@
                 })
                 ;
             </script>
-            <div class="dropdown text-end">
+            <div th:if="${session.type.equals('ADMIN') || session.type.equals('STUDENT')}" class="dropdown text-end">
                 <button type="button" class="btn btn-sm btn-outline-light position-relative me-4 dropdown-toggle"
                         data-bs-toggle="dropdown"
                         aria-expanded="false" id="notificationsButton">
@@ -87,7 +87,6 @@
                             </p>
                             <hr class="dropdown-divider">
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -98,7 +97,7 @@
                         e.preventDefault();
                         $.ajax({
                             type: 'post',
-                            url: '/studentsRest/signOut',
+                            url: '/usersRest/signOut',
                             data: $('#formSignOut').serialize()
                             ,
                             success: function (data) {
@@ -120,8 +119,8 @@
                          class="rounded-circle bg-light">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small" style="">
-                    <li><a class="dropdown-item" href="/students/getMyProfile">Профиль</a></li>
-                    <li><a class="dropdown-item" href="/students/getSettingsById">Настройки</a></li>
+                    <li><a class="dropdown-item" href="/users/getMyProfile">Профиль</a></li>
+                    <li><a class="dropdown-item" href="/users/getSettingsById">Настройки</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>

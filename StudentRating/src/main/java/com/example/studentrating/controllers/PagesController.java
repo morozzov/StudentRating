@@ -32,7 +32,7 @@ public class PagesController {
 
     @GetMapping("/about")
     public String about(Model model, HttpSession session) {
-        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+        if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN") || Session.isAuthorize(session).equals("TEACHER")) {
             ArrayList<Notification> notifications = notificationRepository.findAllByStudent_Id(Sort.by(Sort.Direction.DESC, "createdAt"), Session.getSessionId(session));
             model.addAttribute("notifications", notifications);
             model.addAttribute("title", "Справка");

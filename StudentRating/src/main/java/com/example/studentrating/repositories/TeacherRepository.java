@@ -10,4 +10,7 @@ public interface TeacherRepository extends CrudRepository<Teacher, Long> {
     ArrayList<Teacher> findAll();
 
     Teacher findByLogin(String login);
+
+    Teacher findByLoginAndPassword(String login, String password);
+
 }

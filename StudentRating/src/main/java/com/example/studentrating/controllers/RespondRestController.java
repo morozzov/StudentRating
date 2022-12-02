@@ -36,22 +36,26 @@ public class RespondRestController {
     @PostMapping("/makeRespondByUserAndTask")
     public String makeRespondByUserAndTask(Long taskId, HttpSession session) {
         try {
-            if (respondRepository.findByTask_IdAndExecutor_IdAndStatus(taskId, Session.getSessionId(session), "BUSY").size() == 0) {
-                Task task = taskRepository.findById(taskId).get();
-                if (task.getStudentCount() > 0) {
-                    Respond respond = new Respond();
-                    respond.setStatus("BUSY");
-                    respond.setExecutor(studentRepository.findById(Session.getSessionId(session)).get());
-                    respond.setTask(task);
-                    respondRepository.save(respond);
-                    task.setStudentCount(task.getStudentCount() - 1);
-                    taskRepository.save(task);
-                    return "success";
+            if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+                if (respondRepository.findByTask_IdAndExecutor_IdAndStatus(taskId, Session.getSessionId(session), "BUSY").size() == 0) {
+                    Task task = taskRepository.findById(taskId).get();
+                    if (task.getStudentCount() > 0) {
+                        Respond respond = new Respond();
+                        respond.setStatus("BUSY");
+                        respond.setExecutor(studentRepository.findById(Session.getSessionId(session)).get());
+                        respond.setTask(task);
+                        respondRepository.save(respond);
+                        task.setStudentCount(task.getStudentCount() - 1);
+                        taskRepository.save(task);
+                        return "success";
+                    } else {
+                        return "Закончились свободные места для выполнения поручения";
+                    }
                 } else {
-                    return "Закончились свободные места для выполнения поручения";
+                    return "Вы уже откликнулись на данное поручение";
                 }
             } else {
-                return "Вы уже откликнулись на данное поручение";
+                return "У вас нет прав на данное действие";
             }
 
         } catch (Exception e) {
@@ -62,31 +66,34 @@ public class RespondRestController {
     @PostMapping("/cancelRespondByUserAndRespond")
     public String cancelRespondByUserAndRespond(Long respondId, HttpSession session) {
         try {
-            Respond respond = respondRepository.findById(respondId).get();
-            if (respond.getExecutor().getId().equals(Session.getSessionId(session))) {
-                if (respond.getStatus().equals("BUSY")) {
-                    respond.setStatus("CANCELED");
-                    respond.setCompletedAt(LocalDateTime.now());
-                    respondRepository.save(respond);
-                    Task task = taskRepository.findById(respond.getTask().getId()).get();
-                    task.setStudentCount(task.getStudentCount() + 1);
-                    taskRepository.save(task);
-                    Student student = studentRepository.findById(respond.getExecutor().getId()).get();
-                    student.setPoints(student.getPoints() - 1);
-                    studentRepository.save(student);
-                    Notification notification = new Notification();
-                    notification.setCost(-1);
-                    notification.setTitle(task.getTitle() + " - ОТКАЗ");
-                    notification.setStudent(student);
-                    notificationRepository.save(notification);
-                    return "success";
+            if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+                Respond respond = respondRepository.findById(respondId).get();
+                if (respond.getExecutor().getId().equals(Session.getSessionId(session))) {
+                    if (respond.getStatus().equals("BUSY")) {
+                        respond.setStatus("CANCELED");
+                        respond.setCompletedAt(LocalDateTime.now());
+                        respondRepository.save(respond);
+                        Task task = taskRepository.findById(respond.getTask().getId()).get();
+                        task.setStudentCount(task.getStudentCount() + 1);
+                        taskRepository.save(task);
+                        Student student = studentRepository.findById(respond.getExecutor().getId()).get();
+                        student.setPoints(student.getPoints() - 1);
+                        studentRepository.save(student);
+                        Notification notification = new Notification();
+                        notification.setCost(-1);
+                        notification.setTitle(task.getTitle() + " - ОТКАЗ");
+                        notification.setStudent(student);
+                        notificationRepository.save(notification);
+                        return "success";
+                    } else {
+                        return "Не существует выбранного активного отклика";
+                    }
                 } else {
-                    return "Не существует выбранного активного отклика";
+                    return "Вы не откликались на данное поручение";
                 }
             } else {
-                return "Вы не откликались на данное поручение";
+                return "У вас нет прав на данное действие";
             }
-
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -95,25 +102,29 @@ public class RespondRestController {
     @PostMapping("/disputeRespond")
     public String disputeRespond(Long respondId, HttpSession session) {
         try {
-            Respond respond = respondRepository.findById(respondId).get();
-            if (respond.getExecutor().getId().equals(Session.getSessionId(session))) {
-                if (!respond.isDisputed()) {
-                    respond.setDisputed(true);
-                    respondRepository.save(respond);
-                    Notification notification = new Notification();
-                    notification.setCost(0);
-                    notification.setTitle(respond.getTask().getTitle() + " - ОСПАРИВАЕТСЯ");
-                    notification.setStudent(respond.getExecutor());
-                    notificationRepository.save(notification);
+            if (Session.isAuthorize(session).equals("STUDENT") || Session.isAuthorize(session).equals("ADMIN")) {
+                Respond respond = respondRepository.findById(respondId).get();
+                if (respond.getExecutor().getId().equals(Session.getSessionId(session))) {
+                    if (!respond.isDisputed()) {
+                        respond.setDisputed(true);
+                        respondRepository.save(respond);
+                        Notification notification = new Notification();
+                        notification.setCost(0);
+                        notification.setTitle(respond.getTask().getTitle() + " - ОСПАРИВАЕТСЯ");
+                        notification.setStudent(respond.getExecutor());
+                        notificationRepository.save(notification);
 
-                    //TODO: realize logic for dispute to mentors sending
+                        //TODO: realize logic for dispute to mentors sending
 
-                    return "success";
+                        return "success";
+                    } else {
+                        return "Спор уже создан";
+                    }
                 } else {
-                    return "Спор уже создан";
+                    return "Вы не откликались на данное поручение";
                 }
             } else {
-                return "Вы не откликались на данное поручение";
+                return "У вас нет прав на данное действие";
             }
         } catch (Exception e) {
             return "e.getMessage()";

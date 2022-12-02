@@ -10,14 +10,14 @@
 
         <script>
             $(function () {
-                $(document).on('submit', 'form', function (e) {
+                $(document).on('submit', '#formUpdate', function (e) {
                     e.preventDefault();
                     if ($('#inputPassword1').val() == $('#inputPasswordAgain2').val()) {
 
                         $.ajax({
                             type: 'post',
-                            url: '/studentsRest/updateProfile',
-                            data: $('form').serialize()
+                            url: '/usersRest/updateProfile',
+                            data: $('#formUpdate').serialize()
                             ,
                             success: function (data) {
                                 if (data == 'success') {
@@ -35,12 +35,12 @@
             ;
         </script>
         <div class="d-flex justify-content-center mb-3">
-            <form method="post" class="col">
+            <form id="formUpdate" method="post" class="col">
                 <div class="row">
 
                     <div class="col">
                         <div class="row justify-content-center">
-                            <img th:src="${student.imageUrl}" alt="mdo" width="140"
+                            <img th:src="${user.imageUrl}" alt="mdo" width="140"
                                  height="140"
                                  class="rounded-circle mb-3 w-auto" id="image">
                         </div>
@@ -64,7 +64,7 @@
                         <div class="mb-2 mt-1 input-group flex-nowrap">
                             <span class="input-group-text" id="addon-wrapping">@</span>
                             <div class="form-floating ">
-                                <input th:value="${student.getLogin()}" name="login" type="text" class="form-control"
+                                <input th:value="${user.getLogin()}" name="login" type="text" class="form-control"
                                        placeholder="login"
                                        id="inputLogin">
                                 <label name="login" for="inputLogin">Логин</label>

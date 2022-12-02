@@ -13,7 +13,7 @@
                 if ($("#login").val() != "" && $("#password").val() != "") {
                     $.ajax({
                         type: 'post',
-                        url: '/studentsRest/signIn',
+                        url: '/usersRest/signIn',
                         data: $('form').serialize()
                         ,
                         success: function (data) {

@@ -1,5 +1,6 @@
 package com.example.studentrating.controllers;
 
+import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.Student;
 import com.example.studentrating.models.Teacher;
 import com.example.studentrating.repositories.StudentRepository;
@@ -27,19 +28,23 @@ public class TeachersRestController {
     @PostMapping("/addNew")
     public String addNew(String surname, String name, String patronymic, String login, HttpSession session) {
         try {
-            if (studentRepository.findByLogin(login) == null && teacherRepository.findByLogin(login) == null) {
-                Teacher teacher = new Teacher();
-                teacher.setSurname(surname);
-                teacher.setName(name);
-                teacher.setPatronymic(patronymic);
-                teacher.setLogin(login);
-                teacher.setPassword(encryptText("123"));
-                teacher.setImageUrl("/img/avatars/personal.svg");
-                teacher.setRole("TEACHER");
-                teacherRepository.save(teacher);
-                return "success";
+            if (Session.isAuthorize(session).equals("ADMIN")) {
+                if (studentRepository.findByLogin(login) == null && teacherRepository.findByLogin(login) == null) {
+                    Teacher teacher = new Teacher();
+                    teacher.setSurname(surname);
+                    teacher.setName(name);
+                    teacher.setPatronymic(patronymic);
+                    teacher.setLogin(login);
+                    teacher.setPassword(encryptText("123"));
+                    teacher.setImageUrl("/img/avatars/personal.svg");
+                    teacher.setRole("TEACHER");
+                    teacherRepository.save(teacher);
+                    return "success";
+                } else {
+                    return "Введите другой логин";
+                }
             } else {
-                return "Введите другой логин";
+                return "У вас нет прав на данное действие";
             }
         } catch (Exception e) {
             return e.getMessage();

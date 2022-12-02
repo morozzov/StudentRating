@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <div class="row d-flex justify-content-center mb-3">
+            <div class="col-auto">
+                <img th:src="${teacher.imageUrl}" alt="mdo" width="150" height="150"
+                     class="rounded-circle">
+            </div>
+            <div class="col-auto p-4 ">
+                <h5 th:text="${teacher.surname}"></h5>
+                <h5 th:text="${teacher.name}"></h5>
+                <h5 th:text="${teacher.patronymic}"></h5>
+            </div>
+
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>
