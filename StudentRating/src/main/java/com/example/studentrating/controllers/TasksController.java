@@ -47,4 +47,14 @@ public class TasksController {
             return "tasks";
         } else return "redirect:/pages/signIn";
     }
+
+    @GetMapping("/getByUser")
+    public String getByUser(Model model, HttpSession session) {
+        if (Session.isAuthorize(session).equals("TEACHER")) {
+            ArrayList<Task> tasks = taskRepository.findAllByAuthor_IdAndActive(Session.getSessionId(session), true);
+            model.addAttribute("tasks", tasks);
+            model.addAttribute("title", "Мои поручения");
+            return "myTeacherTasks";
+        } else return "redirect:/pages/signIn";
+    }
 }
