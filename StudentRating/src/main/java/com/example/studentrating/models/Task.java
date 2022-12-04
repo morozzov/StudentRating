@@ -21,6 +21,8 @@ public class Task {
 
     private String title;
 
+    private String about;
+
     private int cost;
 
     private int studentCount;

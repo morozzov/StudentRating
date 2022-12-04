@@ -43,7 +43,10 @@
                         <div th:text="${respond.getTask.getTitle()}" class="card-header text-center">
                             Помочь
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-2 text-center">
+                            <span th:text="${respond.getTask().getAbout()}" class="align-middle"></span>
+                        </div>
+                        <div class="card-footer">
                             <div class="col">
                                 <div class="row justify-content-center align-items-center align-items-center">
                                     <p th:text="'Заказчик: ' + ' ' + ${respond.getTask.getAuthor().getSurname()} + ' ' + ${respond.getTask.getAuthor().getName()} + ' ' + ${respond.getTask.getAuthor().getPatronymic()}"

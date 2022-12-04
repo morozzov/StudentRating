@@ -45,7 +45,10 @@
                 <form method="post" id="formTask">
                     <div class="card bg-light mb-3">
                         <div th:text="${task.getTitle()}" class="card-header text-center"></div>
-                        <div class="card-body">
+                        <div class="card-body p-2 text-center">
+                            <span th:text="${task.getAbout()}" class="align-middle"></span>
+                        </div>
+                        <div class="card-footer">
                             <div class="col">
                                 <div class="row justify-content-between">
                                     <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()[0]} + '.' + ${task.getAuthor().getPatronymic()[0]} + '.'"
