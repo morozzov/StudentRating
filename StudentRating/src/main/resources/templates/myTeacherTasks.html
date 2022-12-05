@@ -9,11 +9,51 @@
         <hr>
 
         <script>
-            // TODO: request
+            $(function () {
+                $(document).on('submit', '#formNewTask', function (e) {
+                    e.preventDefault();
+                    if ($('#taskTitle').val() && $('#taskAbout').val() && $('#taskStudentCount').val() && $('#taskCost').val() && $('#taskDeadline').val()) {
+                        $.ajax({
+                            type: 'post',
+                            url: '/tasksRest/addNew',
+                            data: $('#formNewTask').serialize()
+                            ,
+                            success: function (data) {
+                                if (data == "success") {
+                                    window.location = '/tasks/getByUser'
+                                } else {
+                                    alert(data)
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Заполните все поля")
+                    }
+                });
+            });
+            $(function () {
+                $(document).on('submit', '#formTask', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/tasksRest/complete',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                window.location = '/tasks/getByUser'
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                });
+            });
         </script>
 
         <div class="container">
-            <form action="">
+            <form id="formNewTask" action="">
                 <div class="card bg-light mb-3 border-success">
                     <div class="card-header text-center">
                         <input name="title" id="taskTitle" type="text"
@@ -29,12 +69,17 @@
                                            placeholder="Описание">
                                 </div>
                                 <div class="col-auto">
-                                    <input name="deadLine" id="taskCost" type="number"
+                                    <input name="studentCount" id="taskStudentCount" type="number" min="1"
+                                           class="form-control form-control"
+                                           placeholder="Количество студентов">
+                                </div>
+                                <div class="col-2">
+                                    <input name="cost" id="taskCost" type="number" min="1" max="5"
                                            class="form-control form-control"
                                            placeholder="Стоимость">
                                 </div>
                                 <div class="col-auto">
-                                    <input name="title" id="taskDeadline" type="date"
+                                    <input name="deadLine" id="taskDeadline" type="datetime-local"
                                            class="form-control-sm form-control"
                                            placeholder="Крайний срок">
                                 </div>
@@ -47,32 +92,34 @@
                 </div>
             </form>
             <div th:each="task : ${tasks}">
-                <form method="post" id="formRespond">
-                    <input th:value="${task.getId()}" type="hidden" id="respondId"
-                           name="respondId"/>
-                    <div class="card bg-light mb-3">
-                        <div th:text="${task.getTitle()}" class="card-header text-center">
-                            Помочь
-                        </div>
-                        <div class="card-body p-2 text-center">
-                            <span th:text="${task.getAbout()}" class="align-middle"></span>
-                        </div>
-                        <div class="card-footer">
-                            <div class="col">
-                                <div class="row justify-content-center align-items-center align-items-center">
-                                    <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()} + ' ' + ${task.getAuthor().getPatronymic()}"
-                                       class="col text-start"></p>
-                                    <p th:text="'Крайний срок: ' + ${task.getDeadLine().toLocalDate()} + ' ' + ${task.getDeadLine().toLocalTime()}"
-                                       class="col text-center"></p>
-                                    <p th:text="'Стоимость: ' + ${task.getCost()}" class="col text-end"></p>
-                                </div>
+                <div class="card bg-light mb-3">
+                    <div th:text="${task.getTitle()}" class="card-header text-center">
+                        Помочь
+                    </div>
+                    <div class="card-body p-2 text-center">
+                        <span th:text="${task.getAbout()}" class="align-middle"></span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="col">
+                            <div class="row justify-content-between align-items-center">
+                                <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()} + ' ' + ${task.getAuthor().getPatronymic()}"
+                                   class="col-auto text-start"></p>
+                                <p th:text="'Крайний срок: ' + ${task.getDeadLine().toLocalDate()} + ' ' + ${task.getDeadLine().toLocalTime()}"
+                                   class="col-auto text-center"></p>
+                                <p th:text="'Осталось мест: ' + ${task.getStudentCount()}"
+                                   class="col-auto text-center"></p>
+                                <p th:text="'Стоимость: ' + ${task.getCost()}" class="col-auto text-center"></p>
+                            </div>
+                            <form method="post" id="formTask">
+                                <input th:value="${task.getId()}" type="hidden" id="taskId"
+                                       name="taskId"/>
                                 <div class="d-grid">
                                     <button class="btn btn-outline-success" type="submit">Завершить</button>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
