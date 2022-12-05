@@ -5,6 +5,7 @@ import com.example.studentrating.models.Student;
 import com.example.studentrating.repositories.NotificationRepository;
 import com.example.studentrating.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -37,14 +39,13 @@ public class ApiController {
 
     @GetMapping("/getAll")
     public ArrayList<StudentDTO> getAll() {
-        ArrayList<Student> students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "points"));
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 15, Sort.by(Sort.Order.desc("points")))).getContent();
 
         ArrayList<StudentDTO> studentDtoList = new ArrayList<>();
 
         for (var entityItem : students) {
             studentDtoList.add(new StudentDTO(entityItem));
         }
-
         return studentDtoList;
     }
 
