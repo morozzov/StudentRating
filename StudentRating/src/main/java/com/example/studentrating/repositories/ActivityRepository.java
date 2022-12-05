@@ -10,5 +10,7 @@ public interface ActivityRepository extends CrudRepository<Activity, Long> {
 
     ArrayList<Activity> findAllByStudent_Id(Sort createdAt, Long studentId);
 
+    ArrayList<Activity> findAllByAuthor_Id( Long authorId);
+
     ArrayList<Activity> findAllByStudent_Id(Long studentId);
 }

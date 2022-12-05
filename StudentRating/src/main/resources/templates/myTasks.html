@@ -49,10 +49,10 @@
                         <div class="card-footer">
                             <div class="col">
                                 <div class="row justify-content-center align-items-center align-items-center">
-                                    <p th:text="'Заказчик: ' + ' ' + ${respond.getTask.getAuthor().getSurname()} + ' ' + ${respond.getTask.getAuthor().getName()} + ' ' + ${respond.getTask.getAuthor().getPatronymic()}"
+                                    <p th:if="${respond.getTask().getAuthor()!=null}" th:text="'Заказчик: ' + ' ' + ${respond.getTask.getAuthor().getSurname()} + ' ' + ${respond.getTask.getAuthor().getName()} + ' ' + ${respond.getTask.getAuthor().getPatronymic()}"
                                        class="col text-start"></p>
                                     <p th:text="'Крайний срок: ' + ${respond.getTask.getDeadLine().toLocalDate()} + ' ' + ${respond.getTask.getDeadLine().toLocalTime()}"
-                                       class="col text-center"></p>
+                                       class="col-auto"></p>
                                     <p th:text="'Стоимость: ' + ${respond.getTask.getCost()}" class="col text-end"></p>
                                 </div>
                                 <div class="d-grid">

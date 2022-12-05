@@ -10,5 +10,7 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 
     ArrayList<Task> findAllByStudentCountIsNotAndActive(Sort deadLin, int count, boolean active);
 
+    ArrayList<Task> findAllByAuthor_Id(Long id);
+
     ArrayList<Task> findAllByAuthor_IdAndActive(Long id, boolean active);
 }

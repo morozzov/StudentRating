@@ -24,9 +24,6 @@ public class Notification {
     private int cost;
 
     @ManyToOne
-    protected Teacher author;
-
-    @ManyToOne
     protected Student student;
 
     protected LocalDateTime createdAt;

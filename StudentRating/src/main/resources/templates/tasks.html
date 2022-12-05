@@ -51,7 +51,7 @@
                         <div class="card-footer">
                             <div class="col">
                                 <div class="row justify-content-between">
-                                    <p th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()[0]} + '.' + ${task.getAuthor().getPatronymic()[0]} + '.'"
+                                    <p th:if="${task.getAuthor() != null}" th:text="'Заказчик: ' + ' ' + ${task.getAuthor().getSurname()} + ' ' + ${task.getAuthor().getName()[0]} + '.' + ${task.getAuthor().getPatronymic()[0]} + '.'"
                                        class="col-auto text-start"></p>
                                     <p th:text="'Крайний срок: ' + ${task.getDeadLine().toLocalDate()} + ' ' + ${ task.getDeadLine().toLocalTime()}"
                                        class="col-auto text-center"></p>

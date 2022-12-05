@@ -31,8 +31,7 @@
                         alert("Заполните все поля")
                     }
                 });
-            })
-            ;
+            });
             $(function () {
                 $(document).on('submit', '#formStudentDelete', function (e) {
                     e.preventDefault();
@@ -50,8 +49,7 @@
                         }
                     });
                 });
-            })
-            ;
+            });
         </script>
         <div class="row">
             <div class="container col-7">
@@ -164,8 +162,25 @@
                             alert("Заполните все поля")
                         }
                     });
-                })
-                ;
+                });
+                $(function () {
+                    $(document).on('submit', '#formTeacherDelete', function (e) {
+                        e.preventDefault();
+                        $.ajax({
+                            type: 'post',
+                            url: '/teachersRest/deleteById',
+                            data: $(this).serialize()
+                            ,
+                            success: function (data) {
+                                if (data == "success") {
+                                    window.location = '/pages/admin'
+                                } else {
+                                    alert(data)
+                                }
+                            }
+                        });
+                    });
+                });
             </script>
             <div class="container col">
                 <h2>Преподаватели</h2>
@@ -222,6 +237,13 @@
                                 <p th:text="${teacher.patronymic}"
                                    class="card-text text-center"></p>
                             </div>
+                        </div>
+                        <div class="col-auto">
+                            <form id="formTeacherDelete" action="">
+                                <input th:value="${teacher.getId()}" type="hidden" id="teacherId"
+                                       name="teacherId"/>
+                                <button type="submit" class="btn btn-sm btn-outline-danger me-2">Удалить</button>
+                            </form>
                         </div>
                     </div>
                 </div>
