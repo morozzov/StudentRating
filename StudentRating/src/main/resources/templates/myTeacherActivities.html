@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <script>
+            $(function () {
+                $(document).on('submit', '#formNewActivity', function (e) {
+                    e.preventDefault();
+                    if ($('#activityTitle').val() && $('#activityLogin').val() && $('#activityCost').val()) {
+                        $.ajax({
+                            type: 'post',
+                            url: '/activitiesRest/addNew',
+                            data: $('#formNewActivity').serialize()
+                            ,
+                            success: function (data) {
+                                if (data == "success") {
+                                    window.location = '/activities/getByTeacher'
+                                } else {
+                                    alert(data)
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Заполните все поля")
+                    }
+                });
+            });
+            $(function () {
+                $(document).on('submit', '#formActivity', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/activitiesRest/deleteById',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                window.location = '/activities/getByTeacher'
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <div class="container">
+            <form id="formNewActivity" action="">
+                <div class="card bg-light mb-3 border-success">
+                    <div class="card-header text-center">
+                        <input name="title" id="activityTitle" type="text"
+                               class="form-control form-control me-1"
+                               placeholder="Заголовок">
+                    </div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row justify-content-between align-items-center align-items-center mb-2">
+                                <select class="form-select w-auto ms-3" name="login" id="activityLogin">
+                                    <option th:each="student : ${students}" th:value="${student.getLogin()}"
+                                            th:text="${student.getSurname()} + ' ' + ${student.getName()} + ' ' + ${student.getPatronymic()}">
+                                        One
+                                    </option>
+                                </select>
+                                <div class="col-2">
+                                    <input name="cost" id="activityCost" type="number" min="-10" max="10"
+                                           class="form-control form-control"
+                                           placeholder="Стоимость">
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-outline-dark" type="submit">Добавить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div th:each="activity : ${activities}">
+                <div class="card bg-light mb-3">
+                    <div class="card-header text-center p-2">
+                        <span th:text="${activity.getTitle()}" class="align-middle"></span>
+                    </div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row justify-content-between align-items-center align-items-center">
+                                <p th:text="'Дата выставления: ' +  ${activity.getCreatedAt().toLocalDate()} + ' ' + ${activity.getCreatedAt().toLocalTime()}"
+                                   class="col-auto text-center"></p>
+                                <p th:text="'Студент: ' + ' ' + ${activity.getStudent().getSurname()} + ' ' + ${activity.getStudent().getName()} + ' ' + ${activity.getStudent().getPatronymic()}"
+                                   class="col-auto text-center"></p>
+                                <p th:text="'Стоимость: ' + ${activity.getCost()}" class="col-auto text-center"></p>
+                            </div>
+                            <form method="post" id="formActivity">
+                                <input th:value="${activity.getId()}" type="hidden" id="activityId"
+                                       name="activityId"/>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-danger" type="submit">
+                                        Удалить
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>

@@ -23,6 +23,10 @@
                                                                  th:classappend="${#httpServletRequest.getRequestURI() == '/tasks/getByUser' ? 'text-secondary':'text-white'}">Мои
                     поручения</a>
                 </li>
+                <li th:if="${session.type.equals('TEACHER')}"><a href="/activities/getByTeacher" class="nav-link px-2"
+                                                                 th:classappend="${#httpServletRequest.getRequestURI() == '/activities/getByTeacher' ? 'text-secondary':'text-white'}">Мои
+                    активности</a>
+                </li>
                 <li><a href="/pages/about" class="nav-link px-2"
                        th:classappend="${#httpServletRequest.getRequestURI() == '/pages/about' ? 'text-secondary':'text-white'}">Справка</a>
                 </li>

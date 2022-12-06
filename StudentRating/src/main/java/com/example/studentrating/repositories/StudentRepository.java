@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 public interface StudentRepository extends CrudRepository<Student, Long> {
 
-    ArrayList<Student> findAll(Sort points);
+    ArrayList<Student> findAll(Sort sort);
 
     Page<Student> findAll(Pageable pageable);
+
     Student findByLogin(String login);
+
     Student findByLoginAndPassword(String login, String password);
 }
