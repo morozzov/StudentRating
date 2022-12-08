@@ -4,9 +4,10 @@ import javax.servlet.http.HttpSession;
 
 public class Session {
 
-    public static void setSession(HttpSession request, Long id, String type) {
+    public static void setSession(HttpSession request, Long id, String type, boolean council) {
         request.setAttribute("id", id);
         request.setAttribute("type", type);
+        request.setAttribute("council", council);
     }
 
     public static String isAuthorize(HttpSession request) {
@@ -18,6 +19,7 @@ public class Session {
     public static void signOut(HttpSession request) {
         request.setAttribute("id", null);
         request.setAttribute("type", null);
+        request.setAttribute("council", null);
     }
 
     public static Long getSessionId(HttpSession request) {
