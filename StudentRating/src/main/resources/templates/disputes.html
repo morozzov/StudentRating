@@ -10,12 +10,31 @@
 
         <script>
             $(function () {
-                $(document).on('submit', '#disputeConfirm', function (e) {
+                $(document).on('submit', '#dispute', function (e) {
                     e.preventDefault();
                     var $form = $(this);
                     $.ajax({
                         type: 'post',
                         url: '/disputesRest/confirm',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                window.location = '/disputes/getByUserId'
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                });
+            });
+            $(function () {
+                $(document).on('submit', '#disputeDisprove', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/disputesRest/disprove',
                         data: $form.serialize()
                         ,
                         success: function (data) {

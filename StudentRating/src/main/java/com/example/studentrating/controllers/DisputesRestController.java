@@ -3,6 +3,8 @@ package com.example.studentrating.controllers;
 import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.*;
 import com.example.studentrating.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping(path = "/disputesRest")
 public class DisputesRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(DisputesRestController.class);
 
     @Autowired
     private DisputeRepository disputeRepository;
@@ -110,6 +114,10 @@ public class DisputesRestController {
 
                         activityRepository.save(activity);
                     }
+
+                    notificationRepository.save(notification);
+                    disputeRepository.deleteById(disputeId);
+                    log.info("Dispute with id:{} was deleted", disputeId);
                 }
             }
 
@@ -120,10 +128,54 @@ public class DisputesRestController {
     }
 
     @PostMapping("/disprove")
-    public String disprove(Long disputeId, HttpSession session) {
+    public String disprove(Long notDisputeId, HttpSession session) {
         try {
+            Dispute dispute = disputeRepository.findById(notDisputeId).get();
 
-            return "SUCCESS";
+            if (Session.isAuthorize(session).equals("TEACHER")) {
+                if (dispute.getTeacher().getId().equals(Session.getSessionId(session))) {
+                    dispute.setTeacher(null);
+
+                    disputeRepository.save(dispute);
+                } else return "ERROR";
+            } else {
+                if (dispute.getStudent().getId().equals(Session.getSessionId(session))) {
+                    dispute.setStudent(null);
+
+                    disputeRepository.save(dispute);
+                } else return "ERROR";
+            }
+
+
+            if (dispute.getTeacher() == null && dispute.getStudent() == null) {
+                Notification notification = new Notification();
+
+
+                notification.setCost(0);
+                notification.setTitle(dispute.getActivity() == null ? dispute.getRespond().getTask().getTitle() + " - СПОР ОТКЛОНЕН" : dispute.getActivity().getTitle() + " - СПОР ОТКЛОНЕН");
+                notification.setStudent(dispute.getActivity() == null ? dispute.getRespond().getExecutor() : dispute.getActivity().getStudent());
+
+                if (dispute.getActivity() == null) {
+                    Respond respond = dispute.getRespond();
+
+                    respond.setDisputed(false);
+
+                    respondRepository.save(respond);
+                } else {
+                    Activity activity = dispute.getActivity();
+
+                    activity.setDisputed(false);
+
+                    activityRepository.save(activity);
+                }
+
+                notificationRepository.save(notification);
+                disputeRepository.deleteById(notDisputeId);
+
+                log.info("Dispute with id:{} was deleted", notDisputeId);
+            }
+
+            return "success";
         } catch (Exception e) {
             return e.getMessage();
         }
