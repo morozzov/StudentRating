@@ -2,10 +2,7 @@ package com.example.studentrating.controllers;
 
 import com.example.studentrating.lib.Session;
 import com.example.studentrating.models.*;
-import com.example.studentrating.repositories.ActivityRepository;
-import com.example.studentrating.repositories.NotificationRepository;
-import com.example.studentrating.repositories.StudentRepository;
-import com.example.studentrating.repositories.TeacherRepository;
+import com.example.studentrating.repositories.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Random;
 
 @RestController
 @RequestMapping(path = "/activitiesRest")
@@ -28,6 +25,9 @@ public class ActivitiesRestController {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private DisputeRepository disputeRepository;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -124,7 +124,18 @@ public class ActivitiesRestController {
 
                     notificationRepository.save(notification);
 
-                    //TODO: realize logic for dispute to mentors sending
+                    Dispute dispute = new Dispute();
+
+                    dispute.setSum(0);
+                    dispute.setActivity(activity);
+
+                    Teacher teacher = teacherRepository.findRandom();
+                    dispute.setTeacher(teacher);
+
+                    Student student = studentRepository.findRandomCouncil(activity.getStudent().getId());
+                    dispute.setStudent(student);
+
+                    disputeRepository.save(dispute);
 
                     log.info("Activity with id:{} was disputed", activity.getId());
 
