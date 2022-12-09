@@ -44,6 +44,7 @@ public class DisputesRestController {
                     dispute.setTeacher(null);
 
                     disputeRepository.save(dispute);
+                    log.info("Dispute with id:{} was updated", disputeId);
                 } else return "ERROR";
             } else {
                 if (dispute.getStudent().getId().equals(Session.getSessionId(session))) {
@@ -51,6 +52,7 @@ public class DisputesRestController {
                     dispute.setStudent(null);
 
                     disputeRepository.save(dispute);
+                    log.info("Dispute with id:{} was updated", disputeId);
                 } else return "ERROR";
             }
 
@@ -68,12 +70,14 @@ public class DisputesRestController {
                         student.setPoints(dispute.getRespond().getStatus().equals("CANCELED") ? student.getPoints() + dispute.getRespond().getTask().getCost() : student.getPoints() - dispute.getRespond().getTask().getCost());
 
                         studentRepository.save(student);
+                        log.info("Student with id:{} was updated", student.getId());
 
                         Respond respond = dispute.getRespond();
 
                         dispute.setRespond(null);
 
                         disputeRepository.save(dispute);
+                        log.info("Dispute with id:{} was created", disputeId);
 
                         respondRepository.delete(respond);
                     } else {
@@ -86,16 +90,23 @@ public class DisputesRestController {
                         student.setPoints(student.getPoints() - dispute.getActivity().getCost());
 
                         studentRepository.save(student);
+                        log.info("Student with id:{} was updated", student.getId());
 
                         Activity activity = dispute.getActivity();
 
                         dispute.setActivity(null);
 
                         disputeRepository.save(dispute);
+                        log.info("Dispute with id:{} was updated", disputeId);
+
                         activityRepository.delete(activity);
                     }
                     notificationRepository.save(notification);
+                    log.info("Notification with id:{} was created", notification.getId());
+
                     disputeRepository.deleteById(disputeId);
+                    log.info("Dispute with id:{} was deleted", disputeId);
+
                 } else {
                     notification.setCost(0);
                     notification.setTitle(dispute.getActivity() == null ? dispute.getRespond().getTask().getTitle() + " - СПОР ОТКЛОНЕН" : dispute.getActivity().getTitle() + " - СПОР ОТКЛОНЕН");
@@ -107,15 +118,19 @@ public class DisputesRestController {
                         respond.setDisputed(false);
 
                         respondRepository.save(respond);
+                        log.info("Respond with id:{} was created", respond.getId());
                     } else {
                         Activity activity = dispute.getActivity();
 
                         activity.setDisputed(false);
 
                         activityRepository.save(activity);
+                        log.info("Activity with id:{} was updated", activity.getId());
                     }
 
                     notificationRepository.save(notification);
+                    log.info("Notification with id:{} was created", notification.getId());
+
                     disputeRepository.deleteById(disputeId);
                     log.info("Dispute with id:{} was deleted", disputeId);
                 }
@@ -137,12 +152,14 @@ public class DisputesRestController {
                     dispute.setTeacher(null);
 
                     disputeRepository.save(dispute);
+                    log.info("Dispute with id:{} was updated", notDisputeId);
                 } else return "ERROR";
             } else {
                 if (dispute.getStudent().getId().equals(Session.getSessionId(session))) {
                     dispute.setStudent(null);
 
                     disputeRepository.save(dispute);
+                    log.info("Dispute with id:{} was updated", notDisputeId);
                 } else return "ERROR";
             }
 
@@ -161,17 +178,20 @@ public class DisputesRestController {
                     respond.setDisputed(false);
 
                     respondRepository.save(respond);
+                    log.info("Respond with id:{} was updated", respond.getId());
                 } else {
                     Activity activity = dispute.getActivity();
 
                     activity.setDisputed(false);
 
                     activityRepository.save(activity);
+                    log.info("Activity with id:{} was updated", activity.getId());
                 }
 
                 notificationRepository.save(notification);
-                disputeRepository.deleteById(notDisputeId);
+                log.info("Notification with id:{} was created", notification.getId());
 
+                disputeRepository.deleteById(notDisputeId);
                 log.info("Dispute with id:{} was deleted", notDisputeId);
             }
 
