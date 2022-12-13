@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <script>
+        $(function () {
+            $(document).on('submit', '#formActivity', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+                $.ajax({
+                    type: 'post',
+                    url: '/activitiesRest/disputeActivity',
+                    data: $form.serialize()
+                    ,
+                    success: function (data) {
+                        if (data == "success") {
+                            var button = $form.find("button");
+                            button.prop("disabled", true);
+                            button.toggleClass('btn-outline-success btn-outline-dark');
+                            button.text('Оспаривается');
+                            alert('Спор успешно создан')
+                        } else if (data == "Спор уже создан") {
+                            var button = $form.find("button");
+                            button.prop("disabled", true);
+                            button.toggleClass('btn-outline-success btn-outline-dark');
+                            button.text('Оспаривается');
+                            alert(data);
+                        } else {
+                            alert(data);
+                        }
+                    }
+                });
+            });
+        })
+        ;
+        $(function () {
+            $(document).on('submit', '#formRespond', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+                $.ajax({
+                    type: 'post',
+                    url: '/respondsRest/disputeRespond',
+                    data: $form.serialize()
+                    ,
+                    success: function (data) {
+                        if (data == "success") {
+                            var button = $form.find("button");
+                            button.prop("disabled", true);
+                            button.toggleClass('btn-outline-success btn-outline-dark');
+                            button.text('Оспаривается');
+                            alert('Спор успешно создан')
+                        } else if (data == "Спор уже создан") {
+                            var button = $form.find("button");
+                            button.prop("disabled", true);
+                            button.toggleClass('btn-outline-success btn-outline-dark');
+                            button.text('Оспаривается');
+                            alert(data);
+                        } else {
+                            alert(data);
+                        }
+                    }
+                });
+            });
+        })
+        ;
+    </script>
+
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <div class="row d-flex justify-content-between mb-3">
+            <div class="col-auto">
+                <img th:src="${student.imageUrl}" alt="mdo" width="150" height="150"
+                     class="rounded-circle">
+            </div>
+            <div class="col-auto p-4 ">
+                <h5 th:text="${student.name} + ' ' + ${student.surname}"></h5>
+                <h5 th:text="${student.groupName}"></h5>
+                <h5 th:text="${student.points} + ' очков'"></h5>
+            </div>
+
+            <div class="col-3 overflow-auto pt-4"
+                 style="max-height: 8rem">
+                <div th:each="point : ${pastYearPoints}">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body row pt-0 pb-0">
+                            <p th:text="'Год: ' + ${point.getYear().getYear()}" class="col-auto text-start"></p>
+                            <p th:text="'Очки: ' + ${point.getPoints()}" class="col text-end"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h2>Активность</h2>
+                <hr>
+
+                <div th:each="activity : ${activities}" class="container">
+                    <form method="post" id="formActivity">
+                        <input th:value="${activity.getId()}" type="hidden" id="activityId"
+                               name="activityId"/>
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <div class="col">
+                                    <div class="row justify-content-center align-items-center align-items-center">
+                                        <p th:text="${activity.getCreatedAt().toLocalDate()} + ' ' + ${activity.getCreatedAt().toLocalTime()}"
+                                           class="col text-start"></p>
+                                        <p th:text="${activity.getTitle()}" class="col text-center"></p>
+                                        <p th:text="${activity.getCost()}" class="col text-end"></p>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button th:hidden="${buttonsHidden}" class="btn btn-outline-danger"
+                                                th:text="${activity.isDisputed()} ? 'Оспаривается' : 'Оспорить'"
+                                                th:disabled="${activity.isDisputed()} ? 'true' : 'false'"
+                                                th:class="${activity.isDisputed()} ? 'btn btn-outline-dark':'btn btn-outline-danger'"
+                                                type="submit">
+                                            Оспорить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col">
+                <h2>Поручения</h2>
+                <hr>
+
+                <div th:each="respond : ${responds}" class="container">
+                    <form method="post" id="formRespond">
+                        <input th:value="${respond.getId()}" type="hidden" id="respondId"
+                               name="respondId"/>
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <div class="col">
+                                    <div class="row justify-content-center align-items-center align-items-center">
+                                        <p th:text="${respond.getCompletedAt().toLocalDate()} + ' ' + ${respond.getCompletedAt().toLocalTime()}"
+                                           class="col text-start"></p>
+                                        <p th:text="${respond.getStatus().equals('COMPLETED')} ? ${respond.getTask().getTitle()} : ${respond.getTask().getTitle()} + ' (ОТКАЗ)'"
+                                           class="col text-center"></p>
+                                        <p th:text="${respond.getStatus().equals('COMPLETED')} ? ${respond.getTask().getCost()} : '-1'"
+                                           class="col text-end"></p>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button th:hidden="${buttonsHidden}"
+                                                th:text="${respond.isDisputed()} ? 'Оспаривается' : 'Оспорить'"
+                                                th:disabled="${respond.isDisputed()} ? 'true' : 'false'"
+                                                th:class="${respond.isDisputed()} ? 'btn btn-outline-dark':'btn btn-outline-danger'"
+                                                type="submit">
+                                            Оспорить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>

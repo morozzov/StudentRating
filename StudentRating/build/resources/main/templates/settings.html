@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}" class="text-center"></h1>
+        <hr>
+
+        <script>
+            $(function () {
+                $(document).on('submit', '#formUpdate', function (e) {
+                    e.preventDefault();
+                    if ($('#inputPassword1').val() == $('#inputPasswordAgain2').val()) {
+
+                        $.ajax({
+                            type: 'post',
+                            url: '/usersRest/updateProfile',
+                            data: $('#formUpdate').serialize()
+                            ,
+                            success: function (data) {
+                                if (data == 'success') {
+                                    alert("Данные успешно изменены")
+                                } else {
+                                    alert(data)
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Введите одинаковые пароли")
+                    }
+                });
+            })
+            ;
+        </script>
+        <div class="d-flex justify-content-center mb-3">
+            <form id="formUpdate" method="post" class="col">
+                <div class="row">
+
+                    <div class="col">
+                        <div class="row justify-content-center">
+                            <img th:src="${user.imageUrl}" alt="mdo" width="140"
+                                 height="140"
+                                 class="rounded-circle mb-3 w-auto" id="image">
+                        </div>
+                        <div class="mb-3 w-auto">
+                            <input class="form-control" type="file" id="formFile" name="image"
+                                   accept=".jpg, .jpeg, .png, .svg"
+                                   onchange="loadFile(event)">
+                        </div>
+                        <script>
+                            var loadFile = function (event) {
+                                var output = document.getElementById('image');
+                                output.src = URL.createObjectURL(event.target.files[0]);
+                                output.onload = function () {
+                                    URL.revokeObjectURL(output.src) // free memory
+                                }
+                            };
+                        </script>
+                    </div>
+
+                    <div class="col align-items-end">
+                        <div class="mb-2 mt-1 input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">@</span>
+                            <div class="form-floating ">
+                                <input th:value="${user.getLogin()}" name="login" type="text" class="form-control"
+                                       placeholder="login"
+                                       id="inputLogin">
+                                <label name="login" for="inputLogin">Логин</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input name="password1" type="password" class="form-control" placeholder="Password"
+                                   id="inputPassword1">
+                            <label name="password" for="inputPassword1">Пароль</label>
+                        </div>
+                        <div class="form-floating ">
+                            <input name="password2" type="password" class="form-control" placeholder="Password"
+                                   id="inputPasswordAgain2">
+                            <label name="password" for="inputPasswordAgain2">Пароль снова</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row ps-lg-2 pe-lg-2">
+                    <button type="submit" class="btn btn-outline-success">Применить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>

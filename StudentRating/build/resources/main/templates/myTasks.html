@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <script>
+            $(function () {
+                $(document).on('submit', '#formRespond', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/respondsRest/cancelRespondByUserAndRespond',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                $form.parent('div').remove();
+                                alert('Отказ от отклика выполнен')
+                            } else if (data == "Не существует выбранного активного отклика" || data == "Вы не откликались на данное поручение") {
+                                $form.parent('div').remove();
+                                alert(data);
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                });
+            })
+            ;
+        </script>
+        <div class="container">
+            <div th:each="respond : ${responds}">
+                <form method="post" id="formRespond">
+                    <input th:value="${respond.getId()}" type="hidden" id="respondId"
+                           name="respondId"/>
+                    <div class="card bg-light mb-3">
+                        <div th:text="${respond.getTask.getTitle()}" class="card-header text-center">
+                            Помочь
+                        </div>
+                        <div class="card-body p-2 text-center">
+                            <span th:text="${respond.getTask().getAbout()}" class="align-middle"></span>
+                        </div>
+                        <div class="card-footer">
+                            <div class="col">
+                                <div class="row justify-content-center align-items-center align-items-center">
+                                    <p th:if="${respond.getTask().getAuthor()!=null}" th:text="'Заказчик: ' + ' ' + ${respond.getTask.getAuthor().getSurname()} + ' ' + ${respond.getTask.getAuthor().getName()} + ' ' + ${respond.getTask.getAuthor().getPatronymic()}"
+                                       class="col text-start"></p>
+                                    <p th:text="'Крайний срок: ' + ${respond.getTask.getDeadLine().toLocalDate()} + ' ' + ${respond.getTask.getDeadLine().toLocalTime()}"
+                                       class="col-auto"></p>
+                                    <p th:text="'Стоимость: ' + ${respond.getTask.getCost()}" class="col text-end"></p>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-danger" type="submit">Отказаться(-1)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>

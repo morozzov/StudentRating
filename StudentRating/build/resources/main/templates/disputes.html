@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="blocks/head :: head"></head>
+<body>
+<header th:replace="blocks/header :: header"></header>
+<main>
+    <div class="col-lg-8 mx-auto p-4 py-md-5 min-vh-100">
+        <h1 th:text="${title}"></h1>
+        <hr>
+
+        <script>
+            $(function () {
+                $(document).on('submit', '#disputeConfirm', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/disputesRest/confirm',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                window.location = '/disputes/getByUserId'
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                });
+            });
+            $(function () {
+                $(document).on('submit', '#disputeDisprove', function (e) {
+                    e.preventDefault();
+                    var $form = $(this);
+                    $.ajax({
+                        type: 'post',
+                        url: '/disputesRest/disprove',
+                        data: $form.serialize()
+                        ,
+                        success: function (data) {
+                            if (data == "success") {
+                                window.location = '/disputes/getByUserId'
+                            } else {
+                                alert(data);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+        <div class="container">
+            <div th:each="dispute : ${disputes}">
+
+                <div class="card bg-light mb-3">
+                    <div th:if="${dispute.getActivity()}" th:text="${dispute.getActivity().getTitle()}"
+                         class="card-header text-center"></div>
+                    <div th:if="${dispute.getRespond()}"
+                         th:text="${dispute.getRespond().getTask().getTitle()}" class="card-header text-center"></div>
+                    <div class="card-body">
+                        <div class="col">
+                            <div class="row justify-content-center align-items-center align-items-center">
+                                <p th:if="${dispute.getActivity()}"
+                                   th:text="'Студент: ' + ' ' + ${dispute.getActivity().getStudent().getSurname()} + ' ' + ${dispute.getActivity().getStudent().getName()} + ' ' + ${dispute.getActivity().getStudent().getPatronymic()}"
+                                   class="col text-start"></p>
+                                <p th:if="${dispute.getRespond()}"
+                                   th:text="'Студент: ' + ' ' + ${dispute.getRespond().getExecutor().getSurname()} + ' ' + ${dispute.getRespond().getExecutor().getName()} + ' ' + ${dispute.getRespond().getExecutor().getPatronymic()}"
+                                   class="col text-start"></p>
+                                <p th:text="'Дата: ' + ${dispute.getCreatedAt().toLocalDate()} + ' ' + ${dispute.getCreatedAt().toLocalTime()}"
+                                   class="col-auto"></p>
+                                <div class="d-flex col justify-content-end">
+                                    <form id="disputeConfirm" action="">
+                                        <input th:value="${dispute.getId()}" type="hidden" id="disputeId"
+                                               name="disputeId"/>
+                                        <button class="btn btn-outline-success me-1 col-auto" type="submit">Одобрить</button>
+                                    </form>
+                                    <form id="disputeDisprove" action="">
+                                        <input th:value="${dispute.getId()}" type="hidden" id="notDisputeId"
+                                               name="notDisputeId"/>
+                                        <button class="btn btn-outline-danger col-auto" type="submit">Отклонить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="blocks/footer :: footer"></footer>
+</body>
+</html>
